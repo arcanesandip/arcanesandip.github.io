@@ -10,7 +10,7 @@ export default function SneekPeek() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <button className="cursor-pointer rounded bg-white px-4 py-2 font-base text-black hover:bg-purple-700 shadow transition duration-300">
+        <button className="cursor-pointer rounded bg-white px-4 py-2 font-base text-black hover:bg-gray-300 shadow transition duration-300">
           GitHub
         </button>
       </a>

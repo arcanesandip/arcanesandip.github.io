@@ -2,26 +2,18 @@
 :root {
     --color-primary: #333;
     --color-secondary: #fff;
-
     --color-primary-light: #333;
     --color-primary-dark: #21618c;
-
     --color-secondary-light: #f0b27a;
     --color-secondary-dark: #af601a;
-
     --color-neutral-light: #f5f5f5;
     --color-neutral-medium: #cccccc;
     --color-neutral-dark: #333333;
-
     --header-height: 80px;
-
     --primary-font: "Orbitron", sans-serif;
     --secondary-font: "Open Sans", sans-serif;
-
     --fs-base: 1rem;
-
     --spacer: 1rem;
-
     --radius: 1rem;
 }
 

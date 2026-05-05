@@ -1,0 +1,26 @@
+[
+    {
+        "name": "collaboration",
+        "description": "A simple collaborative website where anyone can add their name to learn how to use git and github.",
+        "url": "https://github.com/arcanesandip/collaboration",
+        "stars": 3,
+        "language": "HTML",
+        "image": null
+    },
+    {
+        "name": "dots",
+        "description": "my personal dotfiles for arch linux, featuring helix and zsh.",
+        "url": "https://github.com/arcanesandip/dots",
+        "stars": 2,
+        "language": "Shell",
+        "image": null
+    },
+    {
+        "name": "learning-python",
+        "description": "documenting my process of learning python from the ground up.",
+        "url": "https://github.com/arcanesandip/learning-python",
+        "stars": 1,
+        "language": "Python",
+        "image": null
+    }
+]

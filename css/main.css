@@ -1,3 +1,88 @@
 @import "./layout.css";
 @import "./typography.css";
 @import "./utilities.css";
+
+#repo-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    /* padding: 2rem; */
+}
+
+@media (min-width: 768px) {
+    #repo-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        /* padding: 2rem; */
+    }
+}
+
+.repo-card {
+    background: #000;
+    /* border-radius: 12px; */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    border: 3px solid #141414;
+    /* transition: 0.3s ease-in-out; */
+}
+
+/* .repo-card:hover {
+    border: 3px solid #fff;
+} */
+
+.project-img {
+    aspect-ratio: 16 /9;
+    width: 100%;
+    object-fit: cover;
+    border-bottom: 3px solid #141414;
+}
+
+.no-img-placeholder {
+    aspect-ratio: 16 /9;
+    width: 100%;
+    background: #141414;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.tag-badge {
+    background: #fff;
+    color: #000;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-right: 5px;
+    border: 1px solid #c7d2fe;
+}
+
+.view-btn {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    /* margin-top: 1rem; */
+    padding: 0.2rem 1rem;
+    background: #000;
+    color: #fff;
+    border-radius: 2rem;
+    border: 3px solid #141414;
+    transition: 0.3sec ease-in-out;
+}
+
+.view-btn:hover {
+    text-decoration: 2px solid #fff underline;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+}

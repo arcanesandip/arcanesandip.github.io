@@ -68,6 +68,7 @@ a.button {
   display: flex;
   gap: 5px;
   align-items: center;
+  transition: 0.3s ease-in-out;
 }
 
 a.button:hover {

@@ -54,7 +54,7 @@ async function loadPortfolio() {
                         <div class="card-footer">
                             <a class="button no-underline" id="my-work-link" href="${project.url}" target="_blank" class="view-btn">
                                 <span class="button-text">View my Github</span>
-                                <img src="./assets/icons/arrow-right.svg" alt="arrow" class="right-arrow-icon" />
+                                <img src="./assets/icons/arrow-right.svg" alt="arrow" class="right-arrow-icon" loading="lazy" />
                             </a>
                             <span>${project.language || 'Code'}</span>
                         </div>

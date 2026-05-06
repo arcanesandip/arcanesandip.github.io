@@ -35,6 +35,7 @@ a.icon-link:hover {
   position: fixed;
   top: 0;
   left: 0;
+  /* border-bottom: var(--bdr); */
 }
 
 .nav-title-link {
@@ -49,7 +50,7 @@ a.icon-link:hover {
 /* Small devices (portrait tablets and large phones, 800px and below) */
 @media only screen and (max-width: 800px) {
   .navbar {
-    border-bottom: var(--bdr);
+    /* border-bottom: var(--bdr); */
     padding: 20px 20px;
     background-color: var(--pc-clr);
   }
@@ -87,7 +88,7 @@ a.button:hover {
   justify-content: center;
   align-items: center;
   gap: var(--gap);
-  border-top: var(--bdr);
+  /* border-top: var(--bdr); */
 }
 
 /* Link Styling */

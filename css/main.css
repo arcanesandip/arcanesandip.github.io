@@ -5,9 +5,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
-  --pc-clr: hsl(0, 0%, 0%);
-  --sc-clr: hsl(0, 100%, 100%); 
-  --bd-clr: hsl(100, 100%, 100%, 0.1); 
+  --pc-clr: hsl(0, 0%, 5%);
+  --sc-clr: hsl(0, 0%, 95%); 
+  --bd-clr: hsl(0, 0%, 20%); 
 
   --gap: 1rem;
   --rad: 2rem;

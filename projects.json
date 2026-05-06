@@ -5,7 +5,13 @@
         "url": "https://github.com/arcanesandip/collaboration",
         "stars": 3,
         "language": "HTML",
-        "image": null
+        "tags": [
+            "beginner-project",
+            "git-learning",
+            "hacktoberfest-friendly",
+            "open-source"
+        ],
+        "image": "https://github.com/user-attachments/assets/00b43d03-2d02-421c-8fb9-1d30d027f74a"
     },
     {
         "name": "dots",
@@ -13,6 +19,10 @@
         "url": "https://github.com/arcanesandip/dots",
         "stars": 2,
         "language": "Shell",
+        "tags": [
+            "arch-linux",
+            "dotfiles"
+        ],
         "image": null
     },
     {
@@ -21,6 +31,12 @@
         "url": "https://github.com/arcanesandip/learning-python",
         "stars": 1,
         "language": "Python",
+        "tags": [
+            "daily-code",
+            "learning-in-public",
+            "programming",
+            "python"
+        ],
         "image": null
     }
 ]

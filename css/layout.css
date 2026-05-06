@@ -11,8 +11,6 @@ html {
 }
 
 body {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

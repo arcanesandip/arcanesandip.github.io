@@ -2,23 +2,24 @@ name: Update Project Data
 on:
   schedule:
     - cron: '0 0 * * *' # Runs every night at midnight
-  workflow_dispatch: # Allows you to run it manually with a button
+  workflow_dispatch: # Allows manual trigger
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Crucial: explicitly gives the token write access
+      contents: write   # Allows the bot to commit to the repo
+      pages: write      # Allows the bot to deploy to GitHub Pages
+      id-token: write   # Required for authentication with Pages
     steps:
-      - uses: actions/checkout@v4 # Updated to v4
+      - uses: actions/checkout@v4
       
       - name: Set up Python
-        uses: actions/setup-python@v5 # Updated to v5
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
           
       - name: Install dependencies
-        # Direct install is safer unless you actually have a requirements.txt
         run: pip install requests 
         
       - name: Run scanner
@@ -29,6 +30,17 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add projects.json
-          # The "|| exit 0" prevents the action from failing if there are no changes
           git commit -m "Auto-update projects.json" || exit 0
           git push
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Since you flattened your directory, this picks up root
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

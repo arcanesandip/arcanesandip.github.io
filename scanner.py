@@ -1,35 +1,32 @@
 import requests
 import re
 import json
+import os
+from PIL import Image
+from io import BytesIO
 
 # 1. SETTINGS
 USERNAME = "arcanesandip"
+PINNED_REPOS = ["collaboration", "dots", "learning-python"]
 
-# The only repos that will be included
-PINNED_REPOS = [
-    "collaboration", 
-    "dots", 
-    "learning-python",
-] 
+# Where to save the processed images
+IMG_DIR = "assets/project-thumbs"
+os.makedirs(IMG_DIR, exist_ok=True)
 
 def get_image_from_readme(repo_name):
-    """Checks main and master branches for the first image in README (Markdown or HTML)."""
+    """Checks main and master branches for the first image in README."""
     for branch in ['main', 'master']:
         url = f"https://raw.githubusercontent.com/{USERNAME}/{repo_name}/{branch}/README.md"
         try:
             res = requests.get(url, timeout=10)
             if res.status_code == 200:
-                # 1. Try finding Markdown images: ![alt](url)
                 md_images = re.findall(r'!\[.*?\]\((.*?)\)', res.text)
-                # 2. Try finding HTML images: <img src="url">
                 html_images = re.findall(r'<img [^>]*src="([^"]+)"', res.text)
-                
                 found = md_images + html_images
                 
                 if found:
                     img_url = found[0]
                     if not img_url.startswith("http"):
-                        # Handle relative paths
                         img_url = img_url.lstrip('./')
                         img_url = f"https://raw.githubusercontent.com/{USERNAME}/{repo_name}/{branch}/{img_url}"
                     return img_url
@@ -37,16 +34,72 @@ def get_image_from_readme(repo_name):
             continue
     return None
 
+def process_and_save_image(url, repo_name):
+    """Downloads, resizes to 16:9, and converts image to WebP."""
+    try:
+        print(f"   -> Downloading image for {repo_name}...")
+        response = requests.get(url, timeout=15)
+        img = Image.open(BytesIO(response.content))
+        img = img.convert("RGB")
+
+        target_w, target_h = 800, 450
+        img_w, img_h = img.size
+        img_aspect = img_w / img_h
+        target_aspect = target_w / target_h
+
+        if img_aspect > target_aspect:
+            new_h = target_h
+            new_w = int(target_h * img_aspect)
+        else:
+            new_w = target_w
+            new_h = int(target_w / img_aspect)
+
+        img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+        left = (new_w - target_w) / 2
+        top = (new_h - target_h) / 2
+        right = (new_w + target_w) / 2
+        bottom = (new_h + target_h) / 2
+        img = img.crop((left, top, right, bottom))
+
+        filename = f"{repo_name}.webp"
+        save_path = os.path.join(IMG_DIR, filename)
+        img.save(save_path, "WEBP", quality=80)
+        return f"./{save_path}"
+    except Exception as e:
+        print(f"   X Error processing image: {e}")
+        return None
+
+def process_profile_pic():
+    """Downloads GitHub profile pic, resizes to square, and saves as WebP."""
+    url = f"https://github.com/{USERNAME}.png"
+    try:
+        print(f"Updating profile picture for {USERNAME}...")
+        response = requests.get(url, timeout=15)
+        img = Image.open(BytesIO(response.content))
+        img = img.convert("RGB")
+        
+        # Resize to a standard 400x400 square
+        img = img.resize((400, 400), Image.Resampling.LANCZOS)
+        
+        save_path = "assets/profile.webp"
+        img.save(save_path, "WEBP", quality=90)
+        return f"./{save_path}"
+    except Exception as e:
+        print(f"   X Error updating profile pic: {e}")
+        return f"https://github.com/{USERNAME}.png"
+
 def main():
-    print(f"Scanning GitHub for strictly: {PINNED_REPOS}...")
-    api_url = f"https://api.github.com/users/{USERNAME}/repos"
+    print(f"Scanning GitHub for: {PINNED_REPOS}...")
     
+    # 1. PROCESS PROFILE PIC FIRST
+    pfp_path = process_profile_pic()
+    
+    api_url = f"https://api.github.com/users/{USERNAME}/repos"
     try:
         response = requests.get(api_url)
         repos = response.json()
-        
         if not isinstance(repos, list):
-            print("Error: Could not fetch repos. Check username or API limits.")
+            print("Error: Could not fetch repos.")
             return
     except Exception as e:
         print(f"Connection Error: {e}")
@@ -56,26 +109,33 @@ def main():
 
     for repo in repos:
         name = repo['name']
-        
-        # STRICT FILTER: Name must be in the list
         if name in PINNED_REPOS:
             print(f"Adding: {name}")
-            image = get_image_from_readme(name)
+            raw_img_url = get_image_from_readme(name)
+            local_img_path = None
+            if raw_img_url:
+                local_img_path = process_and_save_image(raw_img_url, name)
             
             portfolio_data.append({
                 "name": name,
-                "description": repo['description'],
+                "description": repo.get('description', ""),
                 "url": repo['html_url'],
                 "stars": repo['stargazers_count'],
                 "language": repo['language'],
-                "tags": repo.get('topics', []), # Added the tags/topics from GitHub metadata
-                "image": image
+                "tags": repo.get('topics', []),
+                "image": local_img_path
             })
 
+    # 2. SAVE AS NEW STRUCTURE
+    output = {
+        "profile_img": pfp_path,
+        "projects": portfolio_data
+    }
+
     with open('projects.json', 'w') as f:
-        json.dump(portfolio_data, f, indent=4)
+        json.dump(output, f, indent=4)
     
-    print(f"Success! Generated projects.json with {len(portfolio_data)} projects.")
+    print(f"\nSuccess! Found {len(portfolio_data)} projects and updated PFP.")
 
 if __name__ == "__main__":
     main()

@@ -28,7 +28,8 @@ jobs:
           python-version: '3.x'
           
       - name: Install dependencies
-        run: pip install requests 
+        # CHANGED: This now installs everything in your requirements.txt (including Pillow)
+        run: pip install -r requirements.txt 
         
       - name: Run scanner
         run: python scanner.py
@@ -37,8 +38,15 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add projects.json
-          git commit -m "Auto-update projects.json" || exit 0
+          
+          # CHANGED: This now tracks both the JSON and the new WebP images
+          git add projects.json assets/project-thumbs/*.webp
+          
+          git commit -m "Auto-update projects and thumbnails" || exit 0
+          
+          # Added a pull with rebase to prevent push errors
+          git pull origin dev --rebase
+          
           # 2. EXPLICITLY PUSH TO DEV
           git push origin dev
 

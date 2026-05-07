@@ -6,7 +6,7 @@
 }
 
 :root {
-  --pc-clr: hsl(0, 0%, 5%);
+  --pc-clr: hsl(0, 0%, 0%);
   --sc-clr: hsl(0, 0%, 95%); 
   --bd-clr: hsl(0, 0%, 20%); 
 
@@ -19,10 +19,13 @@
   --pad: 0.5rem 1rem;
 }
 
+/* Fluid, Responsive Grid */
 #repo-list {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap);
+    /* This automatically wraps cards: minimum 320px wide, maximum 1 fraction of space */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem; /* More breathing room for the stars to show through gaps */
+    width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -33,19 +36,32 @@
     }
 }
 
+/* Updated Repo Card for the New Grid */
 .repo-card {
-    background: var(--pc-clr);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: var(--bdr); 
+    /* border-radius: var(--rad);  */
     overflow: hidden;
-    transition: transform 0.3s ease;
-    border: var(--bdr);
+    background: transparent; 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures all cards in a row are the same height */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
 }
 
+.repo-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--sc-clr);
+}
+
+/* Ensure the image inside the card follows the same rules */
 .project-img {
-    aspect-ratio: 16 /9;
     width: 100%;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
-    border-bottom: var(--bdr);
+    border-bottom: var(--bdr); /* Keeps the internal line consistent */
+    opacity: 0.9;
 }
 
 .no-img-placeholder {
@@ -80,19 +96,24 @@
     border-radius: var(--rad);
 }
 
+/* Match the View Button to the glass theme */
 .view-btn {
     display: flex;
     align-items: center;
     flex-direction: row;
     padding: var(--pad);
-    background: var(--pc-clr);
+    background: rgba(255, 255, 255, 0.05);
     color: var(--sc-clr);
     border-radius: var(--rad);
-    border: var(--bdr);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    transition: 0.2s;
 }
 
 .view-btn:hover {
-    text-decoration: var(--udl);
+    background: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    border-color: var(--sc-clr);
 }
 
 .card-footer {
@@ -103,20 +124,19 @@
 }
 
 #portfolio-header-image-container {
-    /* 1. Explicitly reserve the horizontal space */
-    width: clamp(330px, 10vw, 400px); 
-    
-    /* 2. Lock the aspect ratio so height is calculated immediately */
+    /* 1. Definitive size control */
+    width: 100%;
+    max-width: 400px; /* Adjust this to your preferred max size */
     aspect-ratio: 1 / 1; 
     
-    /* 3. High-signal touch: a subtle background so the "box" exists visually before the image */
-    background-color: var(--bg-secondary, #1a1a1a); 
+    /* 2. Remove the flex-basis interference */
+    flex: 0 0 auto; 
     
+    /* 3. The "Lab" Border & Curve */
     border: var(--bdr);
+    /* border-radius: var(--rad); */
     overflow: hidden;
-    
-    /* 4. Ensure flexbox doesn't "squeeze" this container to 0px */
-    flex-shrink: 0; 
+    background-color: var(--bd-clr);
 }
 
 .portfolio-header-image {
@@ -217,10 +237,10 @@ body {
   gap: 16px;
 }
 
+/* Ensure the container matches your main content width */
 .projects-container {
-  display: flex;
-  gap: 34px 16px;
-  flex-wrap: wrap;
+    width: 100%;
+    display: block; /* Let the grid handle the layout */
 }
 
     /* Project Cards */
@@ -365,8 +385,64 @@ body {
 }
 
 .nav-title {
-  font-weight: 700;
-  font-size: 24px;
+    position: relative;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--sc-clr);
+    display: inline-block;
+}
+
+/* The glitch layers */
+.nav-title::before,
+.nav-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--pc-clr);
+    opacity: 0.8;
+}
+
+/* Horizontal offset + flickering */
+.nav-title::before {
+    left: 2px;
+    text-shadow: -2px 0 #ff00c1;
+    /* This creates the sudden horizontal "slice" */
+    clip-path: inset(45% 0 45% 0);
+    animation: glitch-v2 2s infinite steps(2);
+}
+
+.nav-title::after {
+    left: -2px;
+    text-shadow: 2px 0 #00fff9;
+    clip-path: inset(80% 0 5% 0);
+    animation: glitch-v2 3s infinite steps(1) reverse;
+}
+
+@keyframes glitch-v2 {
+    0% {
+        transform: translate(0);
+        clip-path: inset(10% 0 80% 0);
+    }
+    10% {
+        transform: translate(-5px, 2px);
+        clip-path: inset(40% 0 20% 0);
+    }
+    20% {
+        transform: translate(5px, -2px);
+        clip-path: inset(70% 0 10% 0);
+        opacity: 0.5; /* Flickering effect */
+    }
+    30% {
+        transform: translate(0);
+        clip-path: inset(20% 0 60% 0);
+    }
+    31%, 100% {
+        transform: translate(0);
+        clip-path: inset(100% 0 100% 0); /* Hide it most of the time */
+    }
 }
 
 .button-text {
@@ -434,6 +510,7 @@ a.icon-link:hover {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 2000;
   /* border-bottom: var(--bdr); */
 }
 
@@ -442,8 +519,10 @@ a.icon-link:hover {
   text-decoration: none;
 }
 
-.nav-title-link:hover {
-  text-decoration: underline;
+.nav-title-link:hover .nav-title {
+    text-decoration: none;
+    color: #fff;
+    filter: brightness(1.2);
 }
 
 /* Small devices (portrait tablets and large phones, 800px and below) */
@@ -469,6 +548,7 @@ a.button {
   gap: var(--gap);
   align-items: center;
   transition: 0.3s ease-in-out;
+  z-index: 1500
 }
 
 a.button:hover {
@@ -541,4 +621,57 @@ a.no-underline:hover {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+
+/* 1. The Background Container */
+#star-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; 
+    background: #000; 
+    overflow: hidden;
+}
+
+/* 2. Ambient Twinkling Stars */
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    animation: twinkle var(--duration) infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: translateY(0); }
+    50% { opacity: var(--opacity); transform: translateY(-40px); }
+}
+
+/* 3. NEW: The Shooting Star (The Streak) */
+.shooting-star {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, #fff, transparent);
+    z-index: -1;
+    opacity: 0;
+}
+
+@keyframes shoot {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-20deg);
+        opacity: 1;
+        width: 0px;
+    }
+    10% {
+        width: 150px; /* Tail stretches out quickly */
+    }
+    100% {
+        transform: translateX(-1000px) translateY(400px) rotate(-20deg);
+        opacity: 0;
+        width: 0px;
+    }
 }

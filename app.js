@@ -1,7 +1,12 @@
 /**
- * Portfolio Loader (v2.0 - High Performance)
- * Features: LocalStorage caching, Background sync, and Hero image injection.
+ * Portfolio Loader (v3.0 - High Performance with Integrated PFP)
+ * Features: LocalStorage caching, Background sync, and Local WebP assets.
  */
+
+import { initStarfield } from './stars.js';
+
+// Initialize the background stars immediately
+initStarfield();
 
 const portfolioContainer = document.getElementById("repo-list");
 const headerImage = document.querySelector(".portfolio-header-image");
@@ -53,33 +58,45 @@ function renderProjects(projects) {
 }
 
 async function loadPortfolio() {
-    // 1. SET HERO IMAGE (Fastest execution)
-    if (headerImage) {
-        headerImage.src = `https://github.com/arcanesandip.png`;
-    }
-
-    // 2. CHECK CACHE (Instant Load)
+    // 1. CHECK CACHE (Instant Load)
     const cachedData = localStorage.getItem(CACHE_KEY);
     if (cachedData) {
         try {
-            renderProjects(JSON.parse(cachedData));
+            const data = JSON.parse(cachedData);
+            // We now check for the new object structure
+            if (headerImage && data.profile_img) {
+                headerImage.src = data.profile_img;
+            }
+            if (data.projects) {
+                renderProjects(data.projects);
+            }
         } catch (e) {
             console.error("Cache corrupted, skipping...");
         }
     }
 
-    // 3. BACKGROUND SYNC (Check for updates from the GitHub Bot)
+    // 2. BACKGROUND SYNC (Check for updates from the GitHub Bot)
     try {
         const response = await fetch("./projects.json");
         if (!response.ok) throw new Error("Network issue fetching projects.json");
 
-        const freshProjects = await response.json();
-        const freshDataString = JSON.stringify(freshProjects);
+        const freshData = await response.json();
+        const freshDataString = JSON.stringify(freshData);
 
         // Only re-render and update cache if the data has actually changed
         if (freshDataString !== cachedData) {
             localStorage.setItem(CACHE_KEY, freshDataString);
-            renderProjects(freshProjects);
+            
+            // Update Profile Pic from the new JSON structure
+            if (headerImage && freshData.profile_img) {
+                headerImage.src = freshData.profile_img;
+            }
+            
+            // Update Projects from the new JSON structure
+            if (freshData.projects) {
+                renderProjects(freshData.projects);
+            }
+            
             console.log("Portfolio updated from server.");
         }
     } catch (error) {

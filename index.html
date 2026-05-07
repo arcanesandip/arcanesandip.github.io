@@ -5,11 +5,18 @@
     <link rel="icon" href="#" />
 		<title>Sandip</title>
     <meta name="description" content="Curious developer exploring different areas of programming">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://github.com https://avatars.githubusercontent.com https://github-production-user-asset-6210df.s3.amazonaws.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <link rel="preload" href="./projects.json" as="fetch" crossorigin="anonymous">
+    <meta name="theme-color" content="hsl(0, 0%, 5%)">
 		<link rel="stylesheet" href="/main.css">
 		<script defer src="/app.js"></script>
 	</head>
 	<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Praise the Fool...</p>
+    </div>
     <!-- NAVBAR -->
     <div class="navbar">
       <a class="nav-title-link" href="./index.html">
@@ -62,5 +69,15 @@
         <img class="footer-icon" src="/medium.svg" alt="medium">
       </a>
     </footer>
+    <script>
+      window.addEventListener('load', () => {
+          const loader = document.getElementById('loader');
+          // Add a slight delay so the "distraction" actually works
+          setTimeout(() => {
+              loader.style.opacity = '0';
+              setTimeout(() => loader.remove(), 500);
+          }, 1000); 
+      });
+    </script>
 	</body>
 </html>

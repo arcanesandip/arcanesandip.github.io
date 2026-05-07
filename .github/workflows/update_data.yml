@@ -1,19 +1,22 @@
 name: Update Project Data
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every night at midnight
-  workflow_dispatch: # Allows manual trigger
+    - cron: '0 0 * * *' 
+  workflow_dispatch: 
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # Allows the bot to commit to the repo
-      pages: write      # Allows the bot to deploy to GitHub Pages
-      id-token: write   # Required for authentication with Pages
+      contents: write   
+      pages: write      
+      id-token: write   
     steps:
+      # 1. FORCE THE CHECKOUT TO THE DEV BRANCH
       - uses: actions/checkout@v4
-      
+        with:
+          ref: dev
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -31,7 +34,8 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add projects.json
           git commit -m "Auto-update projects.json" || exit 0
-          git push
+          # 2. EXPLICITLY PUSH TO DEV
+          git push origin dev
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -39,7 +43,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # Since you flattened your directory, this picks up root
+          path: '.' 
 
       - name: Deploy to GitHub Pages
         id: deployment

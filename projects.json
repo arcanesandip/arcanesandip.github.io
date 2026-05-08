@@ -1,42 +1,45 @@
-[
-    {
-        "name": "collaboration",
-        "description": "A simple collaborative website where anyone can add their name to learn how to use git and github.",
-        "url": "https://github.com/arcanesandip/collaboration",
-        "stars": 3,
-        "language": "HTML",
-        "tags": [
-            "beginner-project",
-            "git-learning",
-            "hacktoberfest-friendly",
-            "open-source"
-        ],
-        "image": "https://github.com/user-attachments/assets/792e390e-a699-4cef-b43b-964f89a232c9"
-    },
-    {
-        "name": "dots",
-        "description": "my personal dotfiles for arch linux, featuring helix and zsh.",
-        "url": "https://github.com/arcanesandip/dots",
-        "stars": 2,
-        "language": "Shell",
-        "tags": [
-            "arch-linux",
-            "dotfiles"
-        ],
-        "image": null
-    },
-    {
-        "name": "learning-python",
-        "description": "documenting my process of learning python from the ground up.",
-        "url": "https://github.com/arcanesandip/learning-python",
-        "stars": 1,
-        "language": "Python",
-        "tags": [
-            "daily-code",
-            "learning-in-public",
-            "programming",
-            "python"
-        ],
-        "image": "https://github.com/user-attachments/assets/5f4cf711-ff00-4963-9474-e9fed494ddcf"
-    }
-]
+{
+    "profile_img": "./assets/profile.webp",
+    "projects": [
+        {
+            "name": "collaboration",
+            "description": "A simple collaborative website where anyone can add their name to learn how to use git and github.",
+            "url": "https://github.com/arcanesandip/collaboration",
+            "stars": 3,
+            "language": "HTML",
+            "tags": [
+                "beginner-project",
+                "git-learning",
+                "hacktoberfest-friendly",
+                "open-source"
+            ],
+            "image": "./assets/project-thumbs/collaboration.webp"
+        },
+        {
+            "name": "dots",
+            "description": "my personal dotfiles for arch linux, featuring helix and zsh.",
+            "url": "https://github.com/arcanesandip/dots",
+            "stars": 2,
+            "language": "Shell",
+            "tags": [
+                "arch-linux",
+                "dotfiles"
+            ],
+            "image": null
+        },
+        {
+            "name": "learning-python",
+            "description": "documenting my process of learning python from the ground up.",
+            "url": "https://github.com/arcanesandip/learning-python",
+            "stars": 1,
+            "language": null,
+            "tags": [
+                "daily-code",
+                "learning-in-public",
+                "programming",
+                "python"
+            ],
+            "image": "./assets/project-thumbs/learning-python.webp"
+        }
+    ]
+}

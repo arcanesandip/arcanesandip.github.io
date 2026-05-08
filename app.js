@@ -1,9 +1,11 @@
 /**
- * Portfolio Loader (v3.0 - High Performance with Integrated PFP)
- * Features: LocalStorage caching, Background sync, and Local WebP assets.
+ * Portfolio Loader (v3.3 - High Performance with Zero-G Physics)
+ * Features: LocalStorage caching, Background sync, and Ambient Drift Parallax.
+ * Change log: Grounded text titles, added drifting CTA button for UX.
  */
 
 import { initStarfield } from './stars.js';
+import { applyZeroG } from './physics.js';
 
 // Initialize the background stars immediately
 initStarfield();
@@ -22,6 +24,9 @@ function renderProjects(projects) {
     projects.forEach(project => {
         const projectCard = document.createElement("div");
         projectCard.className = "repo-card";
+
+        // ACTIVATE PHYSICS: Each card gets its own independent random drift
+        applyZeroG(projectCard);
 
         const imageHtml = project.image 
             ? `<img src="${project.image}" alt="${project.name} preview" class="project-img" loading="lazy">`
@@ -58,12 +63,33 @@ function renderProjects(projects) {
 }
 
 async function loadPortfolio() {
-    // 1. CHECK CACHE (Instant Load)
+    // 1. APPLY PHYSICS TO STATIC UI ELEMENTS (The Parallax Effect)
+    
+    // The Profile Image (Heaviest/Slowest)
+    const headerContainer = document.getElementById("portfolio-header-image-container");
+    if (headerContainer) {
+        applyZeroG(headerContainer, { minDuration: 35, maxDuration: 55 });
+    }
+
+    // The Header CTA Button (Medium Speed - NEW UX FIX)
+    const headerBtn = document.getElementById("header-cta-btn");
+    if (headerBtn) {
+        applyZeroG(headerBtn, { minDuration: 20, maxDuration: 35 });
+    }
+
+    // The Nav Logo (Subtle/Constant)
+    const navLogo = document.querySelector(".nav-title");
+    if (navLogo) {
+        applyZeroG(navLogo, { minDuration: 30, maxDuration: 45 });
+    }
+
+    // 2. DATA SYNCHRONIZATION LOGIC (The Brain - Unchanged from v3.2)
+    
+    // CHECK CACHE (Instant Load for better UX)
     const cachedData = localStorage.getItem(CACHE_KEY);
     if (cachedData) {
         try {
             const data = JSON.parse(cachedData);
-            // We now check for the new object structure
             if (headerImage && data.profile_img) {
                 headerImage.src = data.profile_img;
             }
@@ -75,7 +101,7 @@ async function loadPortfolio() {
         }
     }
 
-    // 2. BACKGROUND SYNC (Check for updates from the GitHub Bot)
+    // BACKGROUND SYNC (Fetch fresh data from your GitHub scanner bot)
     try {
         const response = await fetch("./projects.json");
         if (!response.ok) throw new Error("Network issue fetching projects.json");
@@ -83,16 +109,14 @@ async function loadPortfolio() {
         const freshData = await response.json();
         const freshDataString = JSON.stringify(freshData);
 
-        // Only re-render and update cache if the data has actually changed
+        // Only re-render if the GitHub data has actually changed
         if (freshDataString !== cachedData) {
             localStorage.setItem(CACHE_KEY, freshDataString);
             
-            // Update Profile Pic from the new JSON structure
             if (headerImage && freshData.profile_img) {
                 headerImage.src = freshData.profile_img;
             }
             
-            // Update Projects from the new JSON structure
             if (freshData.projects) {
                 renderProjects(freshData.projects);
             }
@@ -101,7 +125,6 @@ async function loadPortfolio() {
         }
     } catch (error) {
         console.error("Portfolio Sync Error:", error);
-        // If no cache exists and fetch fails, show error
         if (!cachedData) {
             portfolioContainer.innerHTML = `<p class="error-msg">Offline: Could not load projects.</p>`;
         }

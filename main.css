@@ -675,3 +675,44 @@ a.no-underline:hover {
         width: 0px;
     }
 }
+
+/* 1. Define the Zero-G Wander Path */
+@keyframes zeroG {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    /* Slight drift top-right */
+    transform: translate(6px, -10px) rotate(0.5deg);
+  }
+  50% {
+    /* Subtle shift to the left */
+    transform: translate(-5px, 6px) rotate(-0.5deg);
+  }
+  75% {
+    /* Bottom-right wander */
+    transform: translate(4px, 8px) rotate(0.2deg);
+  }
+  100% {
+    /* Loop back to start */
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 2. Create the Physics Class */
+.floating-element {
+  display: inline-block; /* Required for transforms to work on some elements */
+  will-change: transform; /* Performance optimization for your GPU */
+  
+  /* Use CSS variables so we can randomize these in JS later */
+  animation: zeroG var(--float-duration, 25s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+/* 3. Smooth out the hover interaction */
+.repo-card.floating-element {
+    /* This ensures that when you hover, the card "snaps" out of the 
+       ambient drift smoothly to follow your hover rules */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                border-color 0.3s ease;
+}

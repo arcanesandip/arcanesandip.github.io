@@ -1,50 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
+  <head>
+    <meta charset="utf-8">
     <link rel="icon" href="#" />
-		<title>Sandip</title>
+    <title>Sandip | Portfolio</title>
     <meta name="description" content="Curious developer exploring different areas of programming">
     <meta name="viewport" content="width=device-width, initial-scale=1" viewport-fit="cover" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://github.com https://avatars.githubusercontent.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
     <meta name="theme-color" content="#000000">
-		<link rel="stylesheet" href="/main.css">
-		<script type="module" defer src="/app.js"></script>
-	</head>
-	<body>
+    <link rel="stylesheet" href="/main.css">
+    <script type="module" defer src="/app.js"></script>
+  </head>
+  <body>
+    <!-- LOADER: Initial system check -->
     <div id="loader">
         <div class="spinner"></div>
         <p>Praise the Fool...</p>
     </div>
+
     <!-- NAVBAR -->
-    <div class="navbar">
+    <nav class="navbar">
       <a class="nav-title-link" href="./index.html">
+        <!-- Logo is now static (no floating-element class) -->
         <span class="nav-title" data-text="ST">ST</span>
       </a>
-      <a class="button" href="mailto:sandip_tamang@proton.me">
+      <!-- Added floating-element and id to the Contact button -->
+      <a class="button floating-element" id="nav-contact-btn" href="mailto:sandip_tamang@proton.me">
         <span class="button-text">Contact Me</span>
       </a>
-    </div>
+    </nav>
 
     <!-- MAIN PAGE CONTENT -->
     <main id="main-content">
 
       <!-- PORTFOLIO HEADER -->
       <section id="portfolio-header">
-        <div id="portfolio-header-image-container">
-          <img src="./assets/profile.webp" class="portfolio-header-image" alt="arcanesandip" loading="eager">        </div>
+        <!-- Visuals float -->
+        <div id="portfolio-header-image-container" class="floating-element">
+          <img src="./assets/profile.webp" class="portfolio-header-image" alt="arcanesandip" loading="eager">
+        </div>
+        
         <div id="portfolio-header-text-container">
             <div class="header-text">
+              <!-- Text remains static for better readability/UX -->
               <span class="main-title">Hey, I'm @arcanesandip.</span>
-              <div class="body-text">Curious developer exploring different areas of programming by building small projects and learning along the way.</div>
+              <div class="body-text">
+                Curious developer exploring different areas of programming by building small projects and learning along the way.
+              </div>
             </div>
-            <a class="button" href="#my-projects">
+            
+            <!-- Interactive buttons float to draw attention -->
+            <a class="button floating-element" id="header-cta-btn" href="#my-projects">
               <span class="button-text">Check out my projects</span> 
               <img src="/arrow-right.svg" alt="right-arrow-icon" class="right-arrow-icon"/>
             </a>
         </div>
       </section>
 
+      <!-- PROJECTS SECTION: Populated by app.js v3.3 -->
       <section id="my-projects">
           <h2>Featured Projects</h2>
           <div id="repo-list"></div>
@@ -54,28 +67,26 @@
 
     <!-- FOOTER -->
     <footer id="footer">
-
       <a class="icon-link" target="_blank" href="https://github.com/arcanesandip">
-        <img class="footer-icon" src="/github.svg" alt="github">
+        <img class="footer-icon floating-element" src="/github.svg" alt="github">
       </a>
-
-      <a class="icon-link" href="https://x.com/arcanesandip">
-        <img class="footer-icon" src="/x.svg" alt="X">
+      <a class="icon-link" target="_blank" href="https://x.com/arcanesandip">
+        <img class="footer-icon floating-element" src="/x.svg" alt="X">
       </a>
-
       <a class="icon-link" target="_blank" href="https://medium.com/@arcanesandip">
-        <img class="footer-icon" src="/medium.svg" alt="medium">
+        <img class="footer-icon floating-element" src="/medium.svg" alt="medium">
       </a>
     </footer>
+
+    <!-- LOADER SCRIPT -->
     <script>
       window.addEventListener('load', () => {
           const loader = document.getElementById('loader');
-          // Add a slight delay so the "distraction" actually works
           setTimeout(() => {
               loader.style.opacity = '0';
               setTimeout(() => loader.remove(), 500);
           }, 1000); 
       });
     </script>
-	</body>
+  </body>
 </html>

@@ -2,136 +2,6 @@
 @import './reset.css';
 @import './animation.css';
 
-#repo-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem; /* More breathing room for the stars to show through gaps */
-    width: 100%;
-}
-
-@media (min-width: 768px) {
-    #repo-list {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--gap);
-    }
-}
-
-/* Updated Repo Card for the New Grid */
-.repo-card {
-    border: var(--bdr); 
-    /* border-radius: var(--rad);  */
-    overflow: hidden;
-    background: transparent; 
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Ensures all cards in a row are the same height */
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
-}
-
-.repo-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: var(--sc-clr);
-}
-
-/* Ensure the image inside the card follows the same rules */
-.project-img {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-bottom: var(--bdr); /* Keeps the internal line consistent */
-    opacity: 0.9;
-}
-
-.no-img-placeholder {
-    aspect-ratio: 16 /9;
-    width: 100%;
-    background: var(--bd-clr);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--sc-clr);
-}
-
-.card-content {
-    padding: var(--spa);
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-}
-
-.tags-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: calc(var(--gap) / 2);
-}
-
-.tag-badge {
-    background: var(--sc-clr);
-    color: var(--pc-clr);
-    padding: 0.2rem 0.5rem;
-    font-size: 0.8rem;
-    border-radius: var(--rad);
-}
-
-/* Match the View Button to the glass theme */
-.view-btn {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    padding: var(--pad);
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--sc-clr);
-    border-radius: var(--rad);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(4px);
-    transition: 0.2s;
-}
-
-.view-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    text-decoration: none;
-    border-color: var(--sc-clr);
-}
-
-.card-footer {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-#portfolio-header-image-container {
-    /* 1. Definitive size control */
-    width: 100%;
-    max-width: 400px; /* Adjust this to your preferred max size */
-    aspect-ratio: 1 / 1; 
-    
-    /* 2. Remove the flex-basis interference */
-    flex: 0 0 auto; 
-    
-    /* 3. The "Lab" Border & Curve */
-    border: var(--bdr);
-    /* border-radius: var(--rad); */
-    overflow: hidden;
-    background-color: var(--bd-clr);
-}
-
-.portfolio-header-image {
-    width: 100%;
-    height: 100%;
-    /* 5. 'cover' prevents the image from stretching if the GitHub photo isn't perfectly square */
-    object-fit: cover; 
-    display: block;
-}
-
-
-
-/* layout */
-
 * {
   box-sizing: border-box;
   text-decoration: none;
@@ -141,322 +11,400 @@ html {
   text-size-adjust: none;
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
-  -ms-text-size-adjust: none;
+}
+
+html, body {
+  scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
-  margin: 0;
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: var(--color-primary-bg);
+  color: var(--color-secondary-text);
+  font-family: "Inter", sans-serif;
+  font-size: var(--font-size-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-/* Main Page Layout */
-
-#main-content {
-  margin: 225px 425px;
+/* System Loader Overlay Layout */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: var(--color-primary-bg);
   display: flex;
   flex-direction: column;
-  gap: 96px;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  transition: opacity 0.5s ease;
 }
 
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--color-secondary-text);
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
-
-/* Portfolio Header */
-
-#portfolio-header {
+/* ==========================================================================
+   2. Main Layout Container (Mobile First)
+   ========================================================================== */
+#main-content {
+  min-height: 100%;
+  width: 100%;
+  margin: 100px auto 40px auto; /* Clean separation below fixed navigation */
+  padding: 0 24px;
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 120px; /* Airflow space between your header and project grid blocks */
+}
+
+/* ==========================================================================
+   3. Fixed Navigation Component
+   ========================================================================== */
+.navbar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Structural wrapper to clamp layout bounds */
+.nav-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-#portfolio-header-image-container {
+/* PROGRESSIVE ENHANCEMENT: Clear blur/backing effects on ultra-wide viewports */
+@media (min-width: 1300px) {
+  .navbar {
+    background-color: transparent; /* FIXED: 'none' is invalid for background-color */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none; /* FIXED: Keeps prefixes in check */
+  }
+}
+
+.nav-title-link {
+  color: var(--color-secondary-text);
+  text-decoration: none;
+}
+
+.nav-title {
+  position: relative;
+  font-weight: var(--weight-bold);
+  font-size: var(--font-size-heading);
+  color: var(--color-secondary-text);
+  display: inline-block;
+}
+
+.nav-title::before,
+.nav-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-primary-bg);
+  opacity: 0.8;
+}
+
+.nav-title::before {
+  left: 2px;
+  text-shadow: -2px 0 #ff00c1;
+  clip-path: inset(45% 0 45% 0);
+  animation: glitch-v2 2s infinite steps(2);
+}
+
+.nav-title::after {
+  left: -2px;
+  text-shadow: 2px 0 #00fff9;
+  clip-path: inset(80% 0 5% 0);
+  animation: glitch-v2 3s infinite steps(1) reverse;
+}
+
+@keyframes glitch-v2 {
+  0% { transform: translate(0); clip-path: inset(10% 0 80% 0); }
+  10% { transform: translate(-5px, 2px); clip-path: inset(40% 0 20% 0); }
+  20% { transform: translate(5px, -2px); clip-path: inset(70% 0 10% 0); opacity: 0.5; }
+  30% { transform: translate(0); clip-path: inset(20% 0 60% 0); }
+  31%, 100% { transform: translate(0); clip-path: inset(100% 0 100% 0); }
+}
+
+/* ==========================================================================
+   4. Portfolio Header Section
+   ========================================================================== */
+#portfolio-header {
+  padding: clamp(1.2rem, 5vw, 4rem) 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  flex-basis: 50%;
+  gap: 32px;
+  align-items: center;
+  text-align: center;
+}
+
+#portfolio-header-image-container {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  border: var(--border-main);
+  overflow: hidden;
+  background-color: var(--color-border-accent);
 }
 
 .portfolio-header-image {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 #portfolio-header-text-container {
   display: flex;
+  max-width: 400px;
   flex-direction: column;
-  gap: 34px;
-  flex-basis: 50%;
-}
-
-
-
-
-/* About Section */
-
-#about-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.about-section-content {
-  display: flex;
-  flex-direction: column;
-  gap: 34px;
-}
-
-
-
-
-/* Project Section */
-
-#my-work-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* Ensure the container matches your main content width */
-.projects-container {
-    width: 100%;
-    display: block; /* Let the grid handle the layout */
-}
-
-    /* Project Cards */
-
-    .project-card {
-      max-width: calc((100% - 32px) / 3);
-      display: flex;
-      flex-direction: column;
-      gap: 34px;
-    }
-
-    .project-card-text-container {
-      flex-direction: column;
-      display: flex;
-      gap: 16px
-    }
-
-    .project-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      object-position: center;
-    }
-
-
-
-
-/* Project Pages */
-
-#project-header {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.project-header-image {
+  align-items: center;
+  text-align: left;
+  gap: 24px;
   width: 100%;
-  height: auto;
 }
 
-#project-details {
+.header-text {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.project-details-content {
+/* ==========================================================================
+   5. Dynamic JavaScript Projects Section
+   ========================================================================== */
+#my-projects {
   display: flex;
   flex-direction: column;
-  gap: 34px;
+  gap: 24px;
 }
 
-    /* Project Gallery */
-
-    #project-gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .project-gallery-content {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 34px 16px;
-    }
-
-    .gallery-image-container {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .gallery-image-container.half-width {
-      width: calc((100% - 16px) / 2);
-    }
-
-    .gallery-image {
-      width: 100%;
-      height: auto;
-    }
-
-
-/* Extra Extra large devices (large laptops and desktops, 1200px and below) */
-@media only screen and (max-width: 1600px) {
-  #main-content {
-    margin: 225px 275px;
-  }
+#my-projects h2 {
+  font-size: var(--font-size-heading);
+  font-weight: var(--weight-bold);
+  margin: 0;
+  letter-spacing: -0.02em;
 }
 
-/* Extra large devices (large laptops and desktops, 1200px and below) */
-@media only screen and (max-width: 1200px) {
-  #main-content {
-    margin: 225px 175px;
-  }
+/* Dynamic container filled by app.js */
+#repo-list {
+  display: grid;
+  grid-template-columns: 1fr; /* Stacked layout by default on mobile */
+  gap: 24px;
+  width: 100%;
 }
 
-/* Large devices (laptops/desktops, 1000px and below) */
-@media only screen and (max-width: 1000px) {
-  #main-content {
-    margin: 225px 75px;
-  }
+/* Shared structural card models injected by your build script */
+.repo-card, .project-card {
+  width: 100%;
+  border: var(--border-main);
+  overflow: hidden;
+  background: transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
 }
 
-/* Small devices (portrait tablets and large phones, 800px and below) */
-@media only screen and (max-width: 800px) {
-  #main-content {
-    margin: 150px 50px;
+.repo-card:hover, .project-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-secondary-text);
+}
+
+.project-img, .project-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-bottom: var(--border-main);
+  opacity: 0.9;
+}
+
+.no-img-placeholder {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background: var(--color-border-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary-text);
+}
+
+.card-content, .project-card-text-container {
+  padding: var(--spacing-padding-internal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-gap);
+  flex-grow: 1;
+}
+
+.tags-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing-gap) / 2);
+}
+
+.tag-badge {
+  background: var(--color-secondary-text);
+  color: var(--color-primary-bg);
+  padding: 0.2rem 0.5rem;
+  font-size: var(--font-size-interactive);
+  border-radius: var(--radius-rounded);
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: auto; /* Anchors the actions cleanly down into asymmetrical blocks */
+}
+
+/* ==========================================================================
+   6. Interactive System Elements & Buttons
+   ========================================================================== */
+a.button {
+  padding: 0.6rem 1.2rem;
+  font-size: var(--font-size-interactive);
+  border: 3px solid var(--color-border-accent);
+  border-radius: var(--radius-rounded);
+  color: var(--color-secondary-text);
+  width: fit-content;
+  display: inline-flex;
+  gap: var(--spacing-gap);
+  align-items: center;
+  transition: 0.2s ease-in-out;
+}
+
+a.button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-secondary-text);
+}
+
+#header-cta-btn {
+  margin-top: 8px;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: var(--padding-interactive);
+  font-size: var(--font-size-interactive);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-secondary-text);
+  border-radius: var(--radius-rounded);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  transition: 0.2s;
+}
+
+/* ==========================================================================
+   7. Footer Navigation Layout
+   ========================================================================== */
+#footer {
+  width: 100%;
+  display: flex;
+  padding: 48px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 32px; /* Generous button layout hit target gaps for touchscreen inputs */
+}
+
+
+/* ==========================================================================
+   8. Media Queries (Progressive Enhancements Layer)
+   ========================================================================== */
+
+/* --- Medium Devices & Tablets (Breakout column splits) --- */
+@media (min-width: 650px) {
+  #repo-list {
+    grid-template-columns: repeat(2, 1fr); /* Snaps cards to twin-column layout */
   }
 
   #portfolio-header {
-    flex-direction: column;
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-end;
+    justify-content: center;
   }
-
-  .project-card {
-    max-width: calc((100% - 16px) / 2);
-  }
-}
-
-/* Small devices (portrait tablets and large phones, 600px and below) */
-@media only screen and (max-width: 600px) {
-  #main-content {
-    margin: 125px 20px;
-  }
-
-  .project-card {
-    max-width: 100%;
-  }
-}
-
-
-/* typography */
-
-html, body {
-    scroll-behavior: smooth;
-}
-
-body {
-  background-color: var(--pc-clr);
-  color: var(--sc-clr);
-  font-family: "Inter", sans-serif;
-}
-
-.nav-title {
-    position: relative;
-    font-weight: 700;
-    font-size: 24px;
-    color: var(--sc-clr);
-    display: inline-block;
-}
-
-/* The glitch layers */
-.nav-title::before,
-.nav-title::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
+  
+  #portfolio-header-text-container {
+    flex: 1;
     width: 100%;
     height: 100%;
-    background: var(--pc-clr);
-    opacity: 0.8;
-    padding: 20px;
+    align-items: flex-start;
+    /* background-color: red; */
+  }
+  #portfolio-header-image-container {
+      flex: 1;
+  }
 }
 
-/* Horizontal offset + flickering */
-.nav-title::before {
-    left: 2px;
-    text-shadow: -2px 0 #ff00c1;
-    /* This creates the sudden horizontal "slice" */
-    clip-path: inset(45% 0 45% 0);
-    animation: glitch-v2 2s infinite steps(2);
-}
-
-.nav-title::after {
-    left: -2px;
-    text-shadow: 2px 0 #00fff9;
-    clip-path: inset(80% 0 5% 0);
-    animation: glitch-v2 3s infinite steps(1) reverse;
-}
-
-@keyframes glitch-v2 {
-    0% {
-        transform: translate(0);
-        clip-path: inset(10% 0 80% 0);
-    }
-    10% {
-        transform: translate(-5px, 2px);
-        clip-path: inset(40% 0 20% 0);
-    }
-    20% {
-        transform: translate(5px, -2px);
-        clip-path: inset(70% 0 10% 0);
-        opacity: 0.5; /* Flickering effect */
-    }
-    30% {
-        transform: translate(0);
-        clip-path: inset(20% 0 60% 0);
-    }
-    31%, 100% {
-        transform: translate(0);
-        clip-path: inset(100% 0 100% 0); /* Hide it most of the time */
-    }
-}
-
-.button-text {
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.image-caption {
-  font-size: 14px;
-  font-weight: 500;
-}
-
+/* ==========================================================================
+   Typography Utilities
+   ========================================================================== */
 .main-title {
-  font-size: 40px;
-  font-weight: 700;
+  font-size: var(--font-size-title);
+  font-weight: var(--weight-bold);
+  line-height: 1.1; /* Tighter baseline for massive display headlines */
 }
 
 .subheader-text {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: var(--font-size-heading);
+  font-weight: var(--weight-bold);
+  line-height: 1.25; /* Balanced spacing for subheadings */
 }
 
 .body-text {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: var(--font-size-body);
+  font-weight: var(--weight-medium);
+  line-height: 1.6; /* Optimal proportions for descriptive body text blocks */
 }
 
+.button-text {
+  font-size: var(--font-size-interactive);
+  font-weight: var(--weight-bold);
+  line-height: 1.2; /* Sharp alignment inside action buttons */
+}
 
-/* utility */
+.image-caption {
+  font-size: var(--font-size-interactive);
+  font-weight: var(--weight-medium);
+  line-height: 1.4;
+}
 
-/* Icons */
-
+/* ==========================================================================
+   Icon Utilities
+   ========================================================================== */
 .right-arrow-icon {
   width: 16px;
   height: 16px;
@@ -478,97 +426,3 @@ a.icon-link:hover {
   margin: 0;
   transform: rotate(15deg);
 }
-
-
-/* Navbar Styling */
-
-.navbar {
-  /* background-color: var(--pc-clr); */
-  width: 100%;
-  padding: 30px 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2000;
-  /* border-bottom: var(--bdr); */
-}
-
-.nav-title-link {
-  color: var(--sc-clr);
-  text-decoration: none;
-}
-
-.nav-title-link:hover .nav-title {
-    text-decoration: none;
-    color: #fff;
-    filter: brightness(1.2);
-}
-
-/* Small devices (portrait tablets and large phones, 800px and below) */
-@media only screen and (max-width: 800px) {
-  .navbar {
-    /* border-bottom: var(--bdr); */
-    padding: 20px 20px;
-    background-color: var(--pc-clr);
-  }
-}
-
-
-/* Button Styling */
-
-a.button {
-  padding: 0.5rem 1rem;
-  border: 3px solid var(--bd-clr);
-  border-radius: var(--rad);
-  color: var(--sc-clr);
-  text-decoration: none;
-  width: fit-content;
-  display: flex;
-  gap: var(--gap);
-  align-items: center;
-  transition: 0.3s ease-in-out;
-  z-index: 1500
-}
-
-a.button:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  cursor: pointer;
-}
-
-
-/* Footer Styling */
-
-#footer {
-  width: 100%;
-  display: flex;
-  padding: 30px 50px;
-  justify-content: center;
-  align-items: center;
-  gap: var(--gap);
-  /* border-top: var(--bdr); */
-}
-
-/* Link Styling */
-a.no-underline {
-  text-decoration: none;
-  color: var(--sc-clr);
-}
-
-a.no-underline:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-/* Small devices (portrait tablets and large phones, 800px and below) */
-@media only screen and (max-width: 800px) {
-  #footer {
-    padding: 20px 20px;
-  }
-}
-
-
-

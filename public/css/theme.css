@@ -6,15 +6,40 @@
 }
 
 :root {
-  --pc-clr: hsl(0, 0%, 0%);
-  --sc-clr: hsl(0, 0%, 95%); 
-  --bd-clr: hsl(0, 0%, 20%); 
+  /* --- Color Palette --- */
+  --color-primary-bg: hsl(0, 0%, 0%);
+  --color-secondary-text: hsl(0, 0%, 95%); 
+  --color-border-accent: hsl(0, 0%, 20%); 
 
-  --gap: 1rem;
-  --rad: 2rem;
-  --spa: var(--gap);
+  /* --- Complete Font Weight Scale --- */
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semi-bold: 600;
+  --weight-bold: 700;
+  --weight-extra-bold: 800;
+  --weight-black: 900;
 
-  --bdr: 3px solid var(--bd-clr);
-  --udl: 2px solid var(--sc-clr) underline;
-  --pad: 0.5rem 1rem;
+  /* --- Fluid Typography (Responsive Clamps) --- */
+  /* Main Portfolio Headline (Scales smoothly from 32px to 48px) */
+  --font-size-title: clamp(2rem, 1.5rem + 2.5vw, 2.5rem);
+  
+  /* Section Headings & Subheaders (Scales smoothly from 20px to 26px) */
+  --font-size-heading: clamp(1.25rem, 1.06rem + 0.94vw, 1.625rem);
+  
+  /* Default Reading Body Text (Scales smoothly from 15px to 17px) */
+  --font-size-body: clamp(0.9375rem, 0.875rem + 0.31vw, 1.0625rem);
+  
+  /* Buttons, Navigation Elements & Captions (Static crisp size) */
+  --font-size-interactive: 0.875rem;
+
+  /* --- Spacing & Radii --- */
+  --spacing-gap: 1rem;
+  --radius-rounded: 2rem;
+  --spacing-padding-internal: var(--spacing-gap);
+
+  /* --- Borders, Lines & Interactive Padding --- */
+  --border-main: 3px solid var(--color-border-accent);
+  --underline-accent: 2px solid var(--color-secondary-text) underline;
+  --padding-interactive: 0.5rem 1rem;
 }

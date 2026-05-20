@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/font/Inter.woff2') format('woff2');
+  font-display: swap;
+  font-style: normal;
+}
+
+:root {
+  --pc-clr: hsl(0, 0%, 0%);
+  --sc-clr: hsl(0, 0%, 95%); 
+  --bd-clr: hsl(0, 0%, 20%); 
+
+  --gap: 1rem;
+  --rad: 2rem;
+  --spa: var(--gap);
+
+  --bdr: 3px solid var(--bd-clr);
+  --udl: 2px solid var(--sc-clr) underline;
+  --pad: 0.5rem 1rem;
+}

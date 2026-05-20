@@ -1,0 +1,122 @@
+/* spinner */
+#loader {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--pc-clr); /* Matches your GitHub theme */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 1s ease;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left-color: var(--bd-clr); /* GitHub Blue */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+/* 1. The Background Container */
+#star-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; 
+    background: #000; 
+    overflow: hidden;
+}
+
+/* 2. Ambient Twinkling Stars */
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    animation: twinkle var(--duration) infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: translateY(0); }
+    50% { opacity: var(--opacity); transform: translateY(-40px); }
+}
+
+/* 3. NEW: The Shooting Star (The Streak) */
+.shooting-star {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, #fff, transparent);
+    z-index: -1;
+    opacity: 0;
+}
+
+@keyframes shoot {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-20deg);
+        opacity: 1;
+        width: 0px;
+    }
+    10% {
+        width: 150px; /* Tail stretches out quickly */
+    }
+    100% {
+        transform: translateX(-1000px) translateY(400px) rotate(-20deg);
+        opacity: 0;
+        width: 0px;
+    }
+}
+
+/* 1. Define the Zero-G Wander Path */
+@keyframes zeroG {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    /* Slight drift top-right */
+    transform: translate(6px, -10px) rotate(0.5deg);
+  }
+  50% {
+    /* Subtle shift to the left */
+    transform: translate(-5px, 6px) rotate(-0.5deg);
+  }
+  75% {
+    /* Bottom-right wander */
+    transform: translate(4px, 8px) rotate(0.2deg);
+  }
+  100% {
+    /* Loop back to start */
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 2. Create the Physics Class */
+.floating-element {
+  display: inline-block; /* Required for transforms to work on some elements */
+  will-change: transform; /* Performance optimization for your GPU */
+  
+  /* Use CSS variables so we can randomize these in JS later */
+  animation: zeroG var(--float-duration, 25s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+/* 3. Smooth out the hover interaction */
+.repo-card.floating-element {
+    /* This ensures that when you hover, the card "snaps" out of the 
+       ambient drift smoothly to follow your hover rules */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                border-color 0.3s ease;
+}

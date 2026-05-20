@@ -1,0 +1,86 @@
+/* Add border-box sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margins, paddings, borders and outlines from all elements */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+}
+
+/* Global line-height*/
+body {
+  line-height: 1.5;
+}
+
+/* Shorter line-height for headings and buttons etc. */
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
+  line-height: 1.1;
+}
+
+/* Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+/* Ordered and unordered lists are unstyled by default 
+Unstyled lists are not announced by VoiceOver Technologies. 
+Add a "list" role to the element, if its truly a list. */
+ol,
+ul,
+menu {
+  list-style: none;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  font-size: inherit;
+}
+
+/* Imporve media defaults */
+/* To overflow a image over 100%, use {max-width: revert;} on the selected element  */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}

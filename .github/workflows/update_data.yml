@@ -28,19 +28,17 @@ jobs:
           python-version: '3.x'
           
       - name: Install dependencies
-        # CHANGED: This now installs everything in your requirements.txt (including Pillow)
-        run: pip install -r requirements.txt 
+        run: pip install -r builder/requirements.txt 
         
       - name: Run scanner
-        run: python scanner.py
+        run: python builder/scanner.py
         
       - name: Commit and Push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # CHANGED: This now tracks both the JSON and the new WebP images
-          git add projects.json assets/project-thumbs/*.webp
+          git add projects.json public/assets/profile.webp public/assets/project-thumbs/*.webp
           
           git commit -m "Auto-update projects and thumbnails" || exit 0
           

@@ -9,8 +9,8 @@ from io import BytesIO
 USERNAME = "arcanesandip"
 PINNED_REPOS = ["collaboration", "dots", "learning-python"]
 
-# Where to save the processed images
-IMG_DIR = "assets/project-thumbs"
+# Where to save the processed images (Fixed typo and added '../' to escape builder directory)
+IMG_DIR = "../public/assets/project-thumbs"
 os.makedirs(IMG_DIR, exist_ok=True)
 
 def get_image_from_readme(repo_name):
@@ -64,7 +64,9 @@ def process_and_save_image(url, repo_name):
         filename = f"{repo_name}.webp"
         save_path = os.path.join(IMG_DIR, filename)
         img.save(save_path, "WEBP", quality=80)
-        return f"./{save_path}"
+        
+        # Returns the relative path standard for your index.html to read cleanly
+        return f"./public/assets/project-thumbs/{filename}"
     except Exception as e:
         print(f"   X Error processing image: {e}")
         return None
@@ -81,9 +83,11 @@ def process_profile_pic():
         # Resize to a standard 400x400 square
         img = img.resize((400, 400), Image.Resampling.LANCZOS)
         
-        save_path = "assets/profile.webp"
+        # Corrected destination path to escape builder/ and go to public/assets/
+        save_path = "../public/assets/profile.webp"
         img.save(save_path, "WEBP", quality=90)
-        return f"./{save_path}"
+        
+        return "./public/assets/profile.webp"
     except Exception as e:
         print(f"   X Error updating profile pic: {e}")
         return f"https://github.com/{USERNAME}.png"
@@ -132,7 +136,8 @@ def main():
         "projects": portfolio_data
     }
 
-    with open('projects.json', 'w') as f:
+    # Saves to the root repository file by stepping out of builder directory
+    with open('../projects.json', 'w') as f:
         json.dump(output, f, indent=4)
     
     print(f"\nSuccess! Found {len(portfolio_data)} projects and updated PFP.")

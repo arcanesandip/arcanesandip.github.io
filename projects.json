@@ -1,5 +1,5 @@
 {
-    "profile_img": "./assets/profile.webp",
+    "profile_img": "./public/assets/profile.webp",
     "projects": [
         {
             "name": "collaboration",
@@ -13,7 +13,7 @@
                 "hacktoberfest-friendly",
                 "open-source"
             ],
-            "image": "./assets/project-thumbs/collaboration.webp"
+            "image": "./public/assets/project-thumbs/collaboration.webp"
         },
         {
             "name": "dots",
@@ -39,7 +39,7 @@
                 "programming",
                 "python"
             ],
-            "image": "./assets/project-thumbs/learning-python.webp"
+            "image": "./public/assets/project-thumbs/learning-python.webp"
         }
     ]
 }

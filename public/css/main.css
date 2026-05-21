@@ -30,33 +30,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* System Loader Overlay Layout */
-#loader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background-color: var(--color-primary-bg);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  transition: opacity 0.5s ease;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--color-secondary-text);
-  border-radius: 50%;
-  animation: spin 1s infinite linear;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 /* ==========================================================================
    2. Main Layout Container (Mobile First)
    ========================================================================== */
@@ -64,10 +37,10 @@ body {
   min-height: 100%;
   width: 100%;
   margin: 100px auto 40px auto; /* Clean separation below fixed navigation */
-  padding: 0 24px;
+  padding: 0 var(--space-sm);
   display: flex;
   flex-direction: column;
-  gap: 120px; /* Airflow space between your header and project grid blocks */
+  gap: var(--space-xxl); /* Airflow space between your header and project grid blocks */
 }
 
 /* ==========================================================================
@@ -80,9 +53,9 @@ body {
   left: 0;
   right: 0;
   z-index: 2000;
-  background-color: rgba(0, 0, 0, 0.5); 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--surface-backdrop);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 /* Structural wrapper to clamp layout bounds */
@@ -90,7 +63,7 @@ body {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: var(--space-xs) var(--space-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -150,7 +123,7 @@ body {
   padding: clamp(1.2rem, 5vw, 4rem) 0;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: var(--space-lg);
   align-items: center;
   text-align: center;
 }
@@ -179,14 +152,14 @@ body {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 24px;
+  gap: var(--space-sm);
   width: 100%;
 }
 
 .header-text {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-xs);
 }
 
 /* ==========================================================================
@@ -195,7 +168,7 @@ body {
 #my-projects {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-sm);
   scroll-margin-top: 80px;
 }
 
@@ -210,7 +183,7 @@ body {
 #repo-list {
   display: grid;
   grid-template-columns: 1fr; /* Stacked layout by default on mobile */
-  gap: 24px;
+  gap: var(--space-sm);
   width: 100%;
 }
 
@@ -262,7 +235,6 @@ body {
 
 .tags-container {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   gap: calc(var(--spacing-gap) / 2);
 }
@@ -278,7 +250,6 @@ body {
 .card-footer {
   display: flex;
   align-items: center;
-  flex-direction: row;
   justify-content: space-between;
   margin-top: auto; /* Anchors the actions cleanly down into asymmetrical blocks */
 }
@@ -292,34 +263,32 @@ a.button {
   border: 3px solid var(--color-border-accent);
   border-radius: var(--radius-rounded);
   color: var(--color-secondary-text);
-  width: fit-content;
   display: inline-flex;
   gap: var(--spacing-gap);
   align-items: center;
-  transition: 0.2s ease-in-out;
+  transition: var(--transition-fast);
 }
 
 a.button:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--surface-soft);
   border-color: var(--color-secondary-text);
 }
 
 #header-cta-btn {
-  margin-top: 8px;
+  margin-top: var(--space-xxs);
 }
 
 .view-btn {
   display: flex;
   align-items: center;
-  flex-direction: row;
   padding: var(--padding-interactive);
   font-size: var(--font-size-interactive);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-soft);
   color: var(--color-secondary-text);
   border-radius: var(--radius-rounded);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(4px);
-  transition: 0.2s;
+  border: 1px solid var(--surface-muted);
+  backdrop-filter: var(--glass-blur-soft);
+  transition: var(--transition-fast);
 }
 
 /* ==========================================================================
@@ -328,10 +297,10 @@ a.button:hover {
 #footer {
   width: 100%;
   display: flex;
-  padding: 48px 24px;
+  padding: var(--space-xl) var(--space-sm);
   justify-content: center;
   align-items: center;
-  gap: 32px; /* Generous button layout hit target gaps for touchscreen inputs */
+  gap: var(--space-md); /* Generous button layout hit target gaps for touchscreen inputs */
 }
 
 
@@ -365,7 +334,7 @@ a.button:hover {
 
 @media (min-width: 1024px) {
   #repo-list {
-    grid-template-columns: repeat(3, 1fr); /* Snaps cards to twin-column layout */
+    grid-template-columns: repeat(3, 1fr); /* Snaps cards to three-column layout */
   }
 }
 

@@ -9,9 +9,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Synchronized with navbar baseline transparency */
-  backdrop-filter: blur(12px); /* Synchronized with navbar glass effect */
-  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--surface-backdrop); /* Synchronized with navbar baseline transparency */
+  backdrop-filter: var(--glass-blur); /* Synchronized with navbar glass effect */
+  -webkit-backdrop-filter: var(--glass-blur);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,7 +72,7 @@
   font-weight: var(--weight-medium);
   color: var(--color-secondary-text);
   opacity: 0.6;
-  margin-bottom: 32px;
+  margin-bottom: var(--space-lg);
   line-height: 1.4;
   text-align: left;
 }
@@ -81,14 +81,14 @@
 #contact-form {
   display: flex;
   flex-direction: column;
-  gap: 24px; /* Standard internal block spacing */
+  gap: var(--space-sm); /* Standard internal block spacing */
   text-align: left;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-xxs);
 }
 
 .form-group label {
@@ -109,7 +109,6 @@
   border: 3px solid var(--color-border-accent); /* Custom high-contrast line configuration */
   border-radius: var(--radius-rounded);
   color: var(--color-secondary-text);
-  font-family: "Inter", sans-serif;
   font-size: var(--font-size-body);
   font-weight: var(--weight-medium);
   outline: none;
@@ -129,7 +128,7 @@
 
 /* Form submission block styles */
 .form-submit-btn {
-  margin-top: 8px;
+  margin-top: var(--space-xxs);
   width: 100%;
   display: inline-flex;
   justify-content: center;
@@ -149,7 +148,7 @@
 
 /* High-contrast inversion execution matching site layout */
 .form-submit-btn:hover {
-  background-color: rgba(255, 255, 255, 0.05); /* Exact match to a.button:hover */
+  background-color: var(--surface-soft); /* Exact match to a.button:hover */
   border-color: var(--color-secondary-text);
 }
 

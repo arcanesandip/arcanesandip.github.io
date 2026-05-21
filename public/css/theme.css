@@ -42,4 +42,25 @@
   --border-main: 3px solid var(--color-border-accent);
   --underline-accent: 2px solid var(--color-secondary-text) underline;
   --padding-interactive: 0.5rem 1rem;
+
+  /* Spacing scale */
+  --space-xxs: 0.5rem;
+  --space-xs: 1rem;
+  --space-sm: 1.5rem;
+  --space-md: 2rem;
+  --space-lg: 2.5rem;
+  --space-xl: 3rem;
+  --space-xxl: 7.5rem;
+
+  /* Shared surface and motion tokens */
+  --surface-quiet: rgba(255, 255, 255, 0.1);
+  --surface-soft: rgba(255, 255, 255, 0.05);
+  --surface-muted: rgba(255, 255, 255, 0.2);
+  --surface-backdrop: rgba(0, 0, 0, 0.5);
+  --glass-blur: blur(12px);
+  --glass-blur-soft: blur(4px);
+  --transition-fast: 0.2s ease-in-out;
+  --transition-spring: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --pc-clr: var(--color-primary-bg);
+  --bd-clr: var(--color-secondary-text);
 }

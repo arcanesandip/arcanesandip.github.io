@@ -62,10 +62,10 @@ export function initContactModal() {
         }
 
         try {
-            // Send the form data in the background using the form's native action URL
+            // **CHANGED LINE:** Wrap FormData in URLSearchParams to match headers perfectly over HTTPS
             const response = await fetch(contactForm.action, {
                 method: 'POST',
-                body: new FormData(contactForm),
+                body: new URLSearchParams(new FormData(contactForm)),
                 headers: { 'Accept': 'application/json' }
             });
 

@@ -19,7 +19,7 @@ html, body {
 }
 
 body {
-  max-width: 1024px;
+  max-width: 1200px;
   margin: 0 auto;
   background-color: var(--color-primary-bg);
   color: var(--color-secondary-text);
@@ -86,22 +86,13 @@ body {
 
 /* Structural wrapper to clamp layout bounds */
 .nav-container {
-  max-width: 1400px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-/* PROGRESSIVE ENHANCEMENT: Clear blur/backing effects on ultra-wide viewports */
-@media (min-width: 1300px) {
-  .navbar {
-    background-color: transparent; /* FIXED: 'none' is invalid for background-color */
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none; /* FIXED: Keeps prefixes in check */
-  }
 }
 
 .nav-title-link {
@@ -171,6 +162,7 @@ body {
   border: var(--border-main);
   overflow: hidden;
   background-color: var(--color-border-accent);
+  border-radius: var(--radius-rounded);
 }
 
 .portfolio-header-image {
@@ -184,7 +176,7 @@ body {
   display: flex;
   max-width: 400px;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   text-align: left;
   gap: 24px;
   width: 100%;
@@ -232,6 +224,7 @@ body {
   flex-direction: column;
   height: 100%;
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
+  border-radius: var(--radius-rounded);
 }
 
 .repo-card:hover, .project-card:hover {
@@ -345,7 +338,7 @@ a.button:hover {
    ========================================================================== */
 
 /* --- Medium Devices & Tablets (Breakout column splits) --- */
-@media (min-width: 650px) {
+@media (min-width: 768px) {
   #repo-list {
     grid-template-columns: repeat(2, 1fr); /* Snaps cards to twin-column layout */
   }
@@ -362,10 +355,15 @@ a.button:hover {
     width: 100%;
     height: 100%;
     align-items: flex-start;
-    /* background-color: red; */
   }
   #portfolio-header-image-container {
       flex: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  #repo-list {
+    grid-template-columns: repeat(3, 1fr); /* Snaps cards to twin-column layout */
   }
 }
 

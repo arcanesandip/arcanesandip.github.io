@@ -35,7 +35,7 @@
 
   /* --- Spacing & Radii --- */
   --spacing-gap: 1rem;
-  --radius-rounded: 2rem;
+  --radius-rounded: 0.5rem;
   --spacing-padding-internal: var(--spacing-gap);
 
   /* --- Borders, Lines & Interactive Padding --- */

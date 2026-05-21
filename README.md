@@ -1,41 +1,32 @@
 # ⚡ THE LAST PORTFOLIO
-A self-correcting, low-maintenance system. Built to be the last one I ever have to manually update.
 
-<img width="4320" height="1901" alt="last_pf" src="https://github.com/user-attachments/assets/9875dc8e-a5ac-4dfe-97eb-ab440347adc9" />
-
----
-
-### ⚙️ Why it's the last one
-
-| Feature | How |
-|---|---|
-| **Auto-Sync** | `scanner.py` tracks GitHub activity in real-time |
-| **Zero-Touch** | GitHub Actions handles backend processing & deployment |
-| **Decoupled** | Content pulled from repo metadata, not hard-coded HTML |
-
-### 🚀 Stack
-
-| Layer | Tech |
-|---|---|
-| **Engine** | Python / GitHub API |
-| **Pipeline** | GitHub Actions (Cron @ 00:00) |
-| **Storage** | `projects.json` |
+A low-maintenance, automation-first portfolio stack. A scheduled GitHub Actions container handles backend ingestion, 'builder/scanner.py' generates repository data matrices atomically, and 'public/js/app.js' hydrates the frontend page with native HTML escaping.
 
 ---
 
-### 📊 PageSpeed Insights
+## 🏗️ Systems Design
 
-<table>
-  <tr>
-    <th align="center">📱 Mobile</th>
-    <th align="center">🖥️ Desktop</th>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/user-attachments/assets/33ef266d-227f-4e42-ac13-bdf5f79eae61" alt="Mobile Score" /></td>
-    <td><img src="https://github.com/user-attachments/assets/63f156fa-cf81-4767-b550-4734b6918743" alt="Desktop Score" /></td>
-  </tr>
-</table>
+- **Automated Ingestion:** 'builder/scanner.py' serves as the primary automated pipeline. It aggregates repository telemetry, extracts language statistics, and dynamically pulls asset pins.
+- **Atomic Storage Swaps:** To prevent file truncation or corruption during network drops, the data script writes payloads to a localized temporary scratchpad file before executing a secure file swap ('os.replace') into production.
+- **Native Browser Hydration:** 'public/js/app.js' consumes 'projects.json' asynchronously, runs a localized 'localStorage' cache routine, and sanitizes dynamic strings via 'escapeHTML()' before injecting them into the DOM.
 
 ---
 
-> **STATUS: SELF-SUSTAINING** ✅
+## 🧪 Local Laboratory Setup
+
+To execute the data ingestion pipeline and test the presentation layout locally:
+
+```bash
+# Clone the workspace architecture
+git clone [https://github.com/arcanesandip/arcanesandip.github.io.git](https://github.com/arcanesandip/arcanesandip.github.io.git)
+cd arcanesandip.github.io
+
+# Install lightweight backend dependencies 
+pip install -r builder/requirements.txt
+
+# Run the ingestion script from the root directory path
+python3 builder/scanner.py
+
+# Launch the native python local server hook
+python3 -m http.server 8080
+```

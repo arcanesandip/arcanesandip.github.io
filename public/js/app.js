@@ -15,6 +15,15 @@ const portfolioContainer = document.getElementById("repo-list");
 const headerImage = document.querySelector(".portfolio-header-image");
 const CACHE_KEY = "arcanesandip_portfolio_cache";
 
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 /**
  * Helper function to render the project cards to the DOM
  */
@@ -29,16 +38,22 @@ function renderProjects(projects) {
         // ACTIVATE PHYSICS: Each card gets its own independent random drift
         applyZeroG(projectCard);
 
-        // Replace this block inside renderProjects:
-        const imageHtml = project.images
+        const safeName = escapeHTML(project.name.replace(/-/g, ' '));
+        const safeDescription = escapeHTML(project.description || "No description provided.");
+        const safeUrl = escapeHTML(project.url);
+        const safeLanguage = escapeHTML(project.language || 'Code');
+        const safeMobileImage = project.images && project.images.mobile ? escapeHTML(project.images.mobile) : '';
+        const safeDesktopImage = project.images && project.images.desktop ? escapeHTML(project.images.desktop) : '';
+
+        const imageHtml = safeMobileImage && safeDesktopImage
             ? `<picture>
-                <source srcset="${project.images.mobile}" media="(max-width: 768px)">
-                <img src="${project.images.desktop}" alt="${project.name} preview" class="project-img" loading="lazy">
+                <source srcset="${safeMobileImage}" media="(max-width: 768px)">
+                <img src="${safeDesktopImage}" alt="${safeName} preview" class="project-img" loading="lazy">
             </picture>`
             : `<div class="no-img-placeholder"><span>No Preview Available</span></div>`;
 
         const tagsHtml = project.tags && project.tags.length > 0
-            ? project.tags.map(tag => `<span class="tag-badge">${tag}</span>`).join("")
+            ? project.tags.map(tag => `<span class="tag-badge">${escapeHTML(tag)}</span>`).join("")
             : "";
 
         projectCard.innerHTML = `
@@ -46,20 +61,20 @@ function renderProjects(projects) {
                 ${imageHtml}
                 <div class="card-content">
                     <div class="card-header">
-                        <h3>${project.name.replace(/-/g, ' ')}</h3>
+                        <h3>${safeName}</h3>
                         <div class="stats">
                             <span>⭐ ${project.stars}</span>     
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a class="button no-underline" id="my-work-link" href="${project.url}" target="_blank">
+                        <a class="button no-underline" id="my-work-link" href="${safeUrl}" target="_blank">
                             <span class="button-text">View my Github</span>
                             <img src="public/assets/icons/arrow-right.svg" alt="arrow" class="right-arrow-icon" loading="eager" />
                         </a>
-                        <span>${project.language || 'Code'}</span>
+                        <span>${safeLanguage}</span>
                     </div>
                     <div class="tags-container">${tagsHtml}</div>
-                    <p class="description">${project.description || "No description provided."}</p>
+                    <p class="description">${safeDescription}</p>
                 </div>
             </div>
         `;

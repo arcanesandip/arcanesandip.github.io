@@ -2,6 +2,8 @@ import requests
 import re
 import json
 import os
+import tempfile
+from requests.exceptions import RequestException
 from PIL import Image
 from io import BytesIO
 
@@ -104,12 +106,19 @@ def main():
     
     api_url = f"https://api.github.com/users/{USERNAME}/repos"
     try:
-        response = requests.get(api_url)
+        response = requests.get(api_url, timeout=10)
+        if response.status_code == 403:
+            print("GitHub API error: rate limit or access denied (403).")
+            return
+        if not response.ok:
+            print(f"GitHub API error: HTTP {response.status_code}.")
+            return
+
         repos = response.json()
         if not isinstance(repos, list):
             print("Error: Could not fetch repos.")
             return
-    except Exception as e:
+    except RequestException as e:
         print(f"Connection Error: {e}")
         return
     
@@ -140,9 +149,14 @@ def main():
         "projects": portfolio_data
     }
 
-    # Saves to the root repository file by stepping out of builder directory
-    with open('../projects.json', 'w') as f:
-        json.dump(output, f, indent=4)
+    # Safely write the portfolio JSON atomically to prevent corruption
+    target_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'projects.json'))
+    temp_dir = os.path.dirname(target_path)
+    with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', delete=False, dir=temp_dir, suffix='.tmp') as tmp_file:
+        json.dump(output, tmp_file, indent=4)
+        tmp_file.flush()
+        os.fsync(tmp_file.fileno())
+    os.replace(tmp_file.name, target_path)
     
     print(f"\nSuccess! Found {len(portfolio_data)} projects and updated PFP.")
 

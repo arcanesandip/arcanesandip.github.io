@@ -3,6 +3,7 @@ export function initContactModal() {
     const modal = document.getElementById('contact-modal');
     const contactForm = document.getElementById('contact-form');
     const modalContent = document.querySelector('.modal-content');
+    let scrollPosition = 0;  /* Global scroll capture for iOS smooth scroll lock/restore */
 
     if (!contactBtn || !modal || !contactForm || !modalContent) return;
 
@@ -14,9 +15,12 @@ export function initContactModal() {
     // 1. OPEN MODAL INTERACTION
     contactBtn.onclick = (e) => {
         e.preventDefault();
-        modal.classList.add('is-active');
-        modal.removeAttribute('inert');
-        document.body.classList.add('no-scroll');
+        scrollPosition = window.scrollY;  /* Capture scroll position before lock */
+        requestAnimationFrame(() => {
+            modal.classList.add('is-active');  /* Defer class toggle for CSS stability */
+            document.body.classList.add('no-scroll');  /* Applies overflow:hidden without DOM shifting */
+            modal.removeAttribute('inert');  /* Allow modal interaction */
+        });
         document.getElementById('contact-name')?.focus();
     };
 
@@ -24,7 +28,8 @@ export function initContactModal() {
     const closeModal = () => {
         modal.classList.remove('is-active');
         modal.setAttribute('inert', '');
-        document.body.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll');  /* Re-enable scrolling */
+        window.scrollTo(0, scrollPosition);  /* Restore scroll position without jump */
         
         // Wait for the CSS fade-out transition to complete before flipping the DOM nodes
         setTimeout(() => {

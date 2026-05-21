@@ -2,13 +2,18 @@
    Contact Form Popup Modal Styles (contact.css)
    ========================================================================== */
 
+/* Reserve scrollbar space to prevent layout shift when modal opens/closes */
+html {
+  scrollbar-gutter: stable;  /* Prevents layout reflow when overflow:hidden is applied */
+}
+
 /* Full viewport backdrop overlay layer */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;  /* iOS dynamic viewport height to handle address bar resizing */
   background-color: var(--surface-backdrop); /* Synchronized with navbar baseline transparency */
   backdrop-filter: var(--glass-blur); /* Synchronized with navbar glass effect */
   -webkit-backdrop-filter: var(--glass-blur);
@@ -109,7 +114,7 @@
   border: 3px solid var(--color-border-accent); /* Custom high-contrast line configuration */
   border-radius: var(--radius-rounded);
   color: var(--color-secondary-text);
-  font-size: var(--font-size-body);
+  font-size: 16px !important;  /* Forces 16px+ to disable iOS auto-zoom on focus */
   font-weight: var(--weight-medium);
   outline: none;
   transition: border-color 0.2s ease-in-out;
@@ -159,6 +164,5 @@
 
 /* Prevents body scroll when a layout overlay modal is active */
 .no-scroll {
-  overflow: hidden;
-  height: 100%;
+  overflow: hidden;  /* Hide scrollbar, but scrollbar-gutter reserves space */
 }

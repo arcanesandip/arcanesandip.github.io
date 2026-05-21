@@ -196,6 +196,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  scroll-margin-top: 80px;
 }
 
 #my-projects h2 {

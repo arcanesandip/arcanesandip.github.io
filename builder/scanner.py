@@ -35,38 +35,42 @@ def get_image_from_readme(repo_name):
     return None
 
 def process_and_save_image(url, repo_name):
-    """Downloads, resizes to 16:9, and converts image to WebP."""
+    """Downloads, resizes to 16:9, and converts image to WebP (Desktop & Mobile)."""
     try:
         print(f"   -> Downloading image for {repo_name}...")
         response = requests.get(url, timeout=15)
         img = Image.open(BytesIO(response.content))
         img = img.convert("RGB")
 
-        target_w, target_h = 800, 450
-        img_w, img_h = img.size
-        img_aspect = img_w / img_h
-        target_aspect = target_w / target_h
+        # Define sizes: (suffix, width, height)
+        sizes = [("_desktop", 800, 450), ("_mobile", 400, 225)]
+        paths = {}
 
-        if img_aspect > target_aspect:
-            new_h = target_h
-            new_w = int(target_h * img_aspect)
-        else:
-            new_w = target_w
-            new_h = int(target_w / img_aspect)
+        for suffix, target_w, target_h in sizes:
+            img_w, img_h = img.size
+            img_aspect = img_w / img_h
+            target_aspect = target_w / target_h
 
-        img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
-        left = (new_w - target_w) / 2
-        top = (new_h - target_h) / 2
-        right = (new_w + target_w) / 2
-        bottom = (new_h + target_h) / 2
-        img = img.crop((left, top, right, bottom))
+            if img_aspect > target_aspect:
+                new_h = target_h
+                new_w = int(target_h * img_aspect)
+            else:
+                new_w = target_w
+                new_h = int(target_w / img_aspect)
 
-        filename = f"{repo_name}.webp"
-        save_path = os.path.join(IMG_DIR, filename)
-        img.save(save_path, "WEBP", quality=80)
+            thumb = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+            left = (new_w - target_w) / 2
+            top = (new_h - target_h) / 2
+            right = (new_w + target_w) / 2
+            bottom = (new_h + target_h) / 2
+            thumb = thumb.crop((left, top, right, bottom))
+
+            filename = f"{repo_name}{suffix}.webp"
+            save_path = os.path.join(IMG_DIR, filename)
+            thumb.save(save_path, "WEBP", quality=80)
+            paths[suffix.replace("_", "")] = f"./public/assets/project-thumbs/{filename}"
         
-        # Returns the relative path standard for your index.html to read cleanly
-        return f"./public/assets/project-thumbs/{filename}"
+        return paths
     except Exception as e:
         print(f"   X Error processing image: {e}")
         return None
@@ -116,9 +120,9 @@ def main():
         if name in PINNED_REPOS:
             print(f"Adding: {name}")
             raw_img_url = get_image_from_readme(name)
-            local_img_path = None
+            local_img_paths = None
             if raw_img_url:
-                local_img_path = process_and_save_image(raw_img_url, name)
+                local_img_paths = process_and_save_image(raw_img_url, name)
             
             portfolio_data.append({
                 "name": name,
@@ -127,7 +131,7 @@ def main():
                 "stars": repo['stargazers_count'],
                 "language": repo['language'],
                 "tags": repo.get('topics', []),
-                "image": local_img_path
+                "images": local_img_paths
             })
 
     # 2. SAVE AS NEW STRUCTURE

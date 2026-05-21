@@ -13,7 +13,10 @@
                 "hacktoberfest-friendly",
                 "open-source"
             ],
-            "image": "./public/assets/project-thumbs/collaboration.webp"
+            "images": {
+                "desktop": "./public/assets/project-thumbs/collaboration_desktop.webp",
+                "mobile": "./public/assets/project-thumbs/collaboration_mobile.webp"
+            }
         },
         {
             "name": "dots",
@@ -25,7 +28,7 @@
                 "arch-linux",
                 "dotfiles"
             ],
-            "image": null
+            "images": null
         },
         {
             "name": "learning-python",
@@ -39,7 +42,10 @@
                 "programming",
                 "python"
             ],
-            "image": "./public/assets/project-thumbs/learning-python.webp"
+            "images": {
+                "desktop": "./public/assets/project-thumbs/learning-python_desktop.webp",
+                "mobile": "./public/assets/project-thumbs/learning-python_mobile.webp"
+            }
         }
     ]
 }

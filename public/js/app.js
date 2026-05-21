@@ -29,8 +29,12 @@ function renderProjects(projects) {
         // ACTIVATE PHYSICS: Each card gets its own independent random drift
         applyZeroG(projectCard);
 
-        const imageHtml = project.image 
-            ? `<img src="${project.image}" alt="${project.name} preview" class="project-img" loading="lazy">`
+        // Replace this block inside renderProjects:
+        const imageHtml = project.images
+            ? `<picture>
+                <source srcset="${project.images.mobile}" media="(max-width: 768px)">
+                <img src="${project.images.desktop}" alt="${project.name} preview" class="project-img" loading="lazy">
+            </picture>`
             : `<div class="no-img-placeholder"><span>No Preview Available</span></div>`;
 
         const tagsHtml = project.tags && project.tags.length > 0

@@ -105,6 +105,11 @@ def main():
     pfp_path = process_profile_pic()
     
     api_url = f"https://api.github.com/users/{USERNAME}/repos"
+    # FAIL: network timeouts, DNS/connect failures, and GitHub 403 rate-limit responses are caught here.
+    #       If the endpoint returns 403 or a non-ok status, the script exits before parsing invalid JSON.
+    # SCALE: Designed for a single-user repo list under 100 items; if repo volume increases, switch to paginated
+    #        GitHub calls and throttle retries to avoid secondary rate-limit exhaustion.
+    # AGE: GitHub /users/:user/repos v3 behavior is stable, but verify if GitHub API response shapes or rate-limit headers change.
     try:
         response = requests.get(api_url, timeout=10)
         if response.status_code == 403:
@@ -149,6 +154,10 @@ def main():
         "projects": portfolio_data
     }
 
+    # FAIL: without atomic writes, script interruption during write can corrupt projects.json.
+    #       This uses a temp file + os.replace to ensure the file is only swapped after the full payload is flushed.
+    # SCALE: Suitable for output payloads in the low MB range; if JSON size grows substantially, switch to streaming writes.
+    # AGE: tempfile/os.replace behavior is stable in modern Python, but confirm compatibility if runner moves below Python 3.8.
     # Safely write the portfolio JSON atomically to prevent corruption
     target_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'projects.json'))
     temp_dir = os.path.dirname(target_path)

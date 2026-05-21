@@ -15,6 +15,9 @@ const portfolioContainer = document.getElementById("repo-list");
 const headerImage = document.querySelector(".portfolio-header-image");
 const CACHE_KEY = "arcanesandip_portfolio_cache";
 
+// FAIL: unescaped repo metadata injected into innerHTML can create XSS vectors if projects.json is tampered with.
+// SCALE: simple text escaping is efficient for a handful of cards; if render payloads grow, move to DOM textContent construction.
+// AGE: regex-based escaping is sufficient for plaintext fields today, but replace with a dedicated sanitizer if template rendering changes.
 function escapeHTML(value) {
     return String(value)
         .replace(/&/g, '&amp;')
@@ -56,6 +59,9 @@ function renderProjects(projects) {
             ? project.tags.map(tag => `<span class="tag-badge">${escapeHTML(tag)}</span>`).join("")
             : "";
 
+        // FAIL: this innerHTML block assumes the escaped strings are valid HTML-safe text.
+        // SCALE: current card rendering is fine for <100 entries; if the repo list expands, replace with createElement/textContent to avoid large DOM string concatenation.
+        // AGE: maintain this block if HTML template structure stays static; if markup changes, revalidate escape coverage for new injected fields.
         projectCard.innerHTML = `
             <div class="card-inner">
                 ${imageHtml}

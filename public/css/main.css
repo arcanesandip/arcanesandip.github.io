@@ -1,6 +1,7 @@
 @import './theme.css';
 @import './reset.css';
 @import './animation.css';
+@import './contact.css';
 
 * {
   box-sizing: border-box;

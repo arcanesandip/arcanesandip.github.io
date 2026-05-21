@@ -6,9 +6,10 @@
 
 import { initStarfield } from './stars.js';
 import { applyZeroG } from './physics.js';
-
+import { initContactModal } from './email.js';
 // Initialize the background stars immediately
 initStarfield();
+initContactModal(); // 2. RUN IT HERE!
 
 const portfolioContainer = document.getElementById("repo-list");
 const headerImage = document.querySelector(".portfolio-header-image");

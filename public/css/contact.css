@@ -1,0 +1,165 @@
+/* ==========================================================================
+   Contact Form Popup Modal Styles (contact.css)
+   ========================================================================== */
+
+/* Full viewport backdrop overlay layer */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Synchronized with navbar baseline transparency */
+  backdrop-filter: blur(12px); /* Synchronized with navbar glass effect */
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Higher layer priority than fixed navbar */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-in-out;
+}
+
+/* Visibility toggle handle */
+.modal-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Container message card block */
+.modal-content {
+  background-color: var(--color-primary-bg);
+  border: var(--border-main); /* Inherits your 3px solid accent style */
+  border-radius: var(--radius-rounded);
+  padding: 40px 24px; /* Matches layout paddings from your main containers */
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+  margin: 0 24px; /* Prevents edge-clipping on tight mobile displays */
+}
+
+/* Escape close boundary button */
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--color-border-accent);
+  font-size: 1.8rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-btn:hover {
+  color: var(--color-secondary-text);
+}
+
+.modal-title {
+  font-size: var(--font-size-heading);
+  font-weight: var(--weight-bold);
+  margin-bottom: 8px;
+  color: var(--color-secondary-text);
+  letter-spacing: -0.02em; /* Synchronized heading tracker */
+  text-align: left;
+}
+
+.modal-subtitle {
+  font-size: var(--font-size-interactive);
+  font-weight: var(--weight-medium);
+  color: var(--color-secondary-text);
+  opacity: 0.6;
+  margin-bottom: 32px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+/* Form block alignment utilities */
+#contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Standard internal block spacing */
+  text-align: left;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: var(--font-size-interactive);
+  font-weight: var(--weight-bold); /* Matches button-text weights */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-secondary-text);
+  opacity: 0.8;
+}
+
+/* Base input and textarea boundaries */
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: var(--padding-interactive);
+  background-color: transparent;
+  border: 3px solid var(--color-border-accent); /* Custom high-contrast line configuration */
+  border-radius: var(--radius-rounded);
+  color: var(--color-secondary-text);
+  font-family: "Inter", sans-serif;
+  font-size: var(--font-size-body);
+  font-weight: var(--weight-medium);
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--color-secondary-text); /* Highlight inversion matching card hover metrics */
+}
+
+/* Restricts horizontal scaling on textarea boxes */
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Form submission block styles */
+.form-submit-btn {
+  margin-top: 8px;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  color: var(--color-secondary-text);
+  border: var(--border-main);
+  border-radius: var(--radius-rounded);
+  padding: 0.6rem 1.2rem; /* Exact spatial dimensions of a.button rules */
+  font-size: var(--font-size-interactive);
+  font-weight: var(--weight-bold); /* Uses crisp structural button fonts */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease;
+}
+
+/* High-contrast inversion execution matching site layout */
+.form-submit-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05); /* Exact match to a.button:hover */
+  border-color: var(--color-secondary-text);
+}
+
+/* Tactile click press feedback */
+.form-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* Prevents body scroll when a layout overlay modal is active */
+.no-scroll {
+  overflow: hidden;
+  height: 100%;
+}

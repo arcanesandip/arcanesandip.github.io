@@ -31,8 +31,14 @@ def get_image_from_readme(repo_name):
                     if not img_url.startswith("http"):
                         img_url = img_url.lstrip('./')
                         img_url = f"https://raw.githubusercontent.com/{USERNAME}/{repo_name}/{branch}/{img_url}"
+                    # GitHub user-attachments URLs may require proper headers
+                    elif "github.com/user-attachments" in img_url:
+                        # Ensure we're using the correct URL format
+                        if not img_url.endswith(("?raw=true", "&raw=true")):
+                            img_url = img_url + "?raw=true"
                     return img_url
-        except Exception:
+        except Exception as e:
+            print(f"   ! Error fetching README for {repo_name} on {branch}: {e}")
             continue
     return None
 
@@ -40,41 +46,50 @@ def process_and_save_image(url, repo_name):
     """Downloads, resizes to 16:9, and converts image to WebP (Desktop & Mobile)."""
     try:
         print(f"   -> Downloading image for {repo_name}...")
-        response = requests.get(url, timeout=15)
+        print(f"      URL: {url}")
+        response = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'})
+        response.raise_for_status()
         img = Image.open(BytesIO(response.content))
         img = img.convert("RGB")
+        print(f"      Downloaded: {img.format} {img.size}")
 
         # Define sizes: (suffix, width, height)
         sizes = [("_desktop", 800, 450), ("_mobile", 400, 225)]
         paths = {}
 
         for suffix, target_w, target_h in sizes:
-            img_w, img_h = img.size
-            img_aspect = img_w / img_h
-            target_aspect = target_w / target_h
+            try:
+                print(f"      Processing {suffix.replace('_', '')}...")
+                img_w, img_h = img.size
+                img_aspect = img_w / img_h
+                target_aspect = target_w / target_h
 
-            if img_aspect > target_aspect:
-                new_h = target_h
-                new_w = int(target_h * img_aspect)
-            else:
-                new_w = target_w
-                new_h = int(target_w / img_aspect)
+                if img_aspect > target_aspect:
+                    new_h = target_h
+                    new_w = int(target_h * img_aspect)
+                else:
+                    new_w = target_w
+                    new_h = int(target_w / img_aspect)
 
-            thumb = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
-            left = (new_w - target_w) / 2
-            top = (new_h - target_h) / 2
-            right = (new_w + target_w) / 2
-            bottom = (new_h + target_h) / 2
-            thumb = thumb.crop((left, top, right, bottom))
+                thumb = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+                left = (new_w - target_w) / 2
+                top = (new_h - target_h) / 2
+                right = (new_w + target_w) / 2
+                bottom = (new_h + target_h) / 2
+                thumb = thumb.crop((left, top, right, bottom))
 
-            filename = f"{repo_name}{suffix}.webp"
-            save_path = os.path.join(IMG_DIR, filename)
-            thumb.save(save_path, "WEBP", quality=80)
-            paths[suffix.replace("_", "")] = f"./public/assets/project-thumbs/{filename}"
+                filename = f"{repo_name}{suffix}.webp"
+                save_path = os.path.join(IMG_DIR, filename)
+                thumb.save(save_path, "WEBP", quality=80)
+                paths[suffix.replace("_", "")] = f"./public/assets/project-thumbs/{filename}"
+                print(f"      ✓ Saved: {filename}")
+            except Exception as e:
+                print(f"      ! Error processing {suffix}: {e}")
+                continue
         
-        return paths
+        return paths if paths else None
     except Exception as e:
-        print(f"   X Error processing image: {e}")
+        print(f"   X Error downloading image: {e}")
         return None
 
 def process_profile_pic():

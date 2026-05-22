@@ -28,7 +28,10 @@
                 "arch-linux",
                 "dotfiles"
             ],
-            "images": null
+            "images": {
+                "desktop": "./public/assets/project-thumbs/dots_desktop.webp",
+                "mobile": "./public/assets/project-thumbs/dots_mobile.webp"
+            }
         },
         {
             "name": "learning-python",

@@ -2,6 +2,10 @@
 
 A low-maintenance, automation-first portfolio stack. A scheduled GitHub Actions container handles backend ingestion, 'builder/scanner.py' generates repository data matrices atomically, and 'public/js/app.js' hydrates the frontend page with native HTML escaping.
 
+## Release v2.0.0
+
+The system is production-hardened with a resilient partial-success model: recoverable asset processing failures are isolated, the frontend remains deterministic, and the automation pipeline preserves atomic payload delivery.
+
 ---
 
 ## 📊 Engineering Standards

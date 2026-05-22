@@ -52,6 +52,7 @@ public/js/app.js
 - **Failure modes:** network timeout, DNS failure, API 403, malformed JSON, missing repo schema.
 - **Current defensive behavior:** `try/except RequestException` catches transport failures. Non-OK HTTP responses print a message and return before JSON processing.
 - **Gap identified:** the implementation currently does not call `sys.exit(1)` on fatal pipeline failures. Without explicit process abort, the workflow may continue with stale assets or leave `public/assets` updated while `projects.json` remains stale.
+- **Operational model:** `v2.0.0` embraces a resilient partial-success model for asset processing: non-critical image fetch/resizing failures are tolerated and logged, while the main data payload remains available.
 - **Recommended hard boundary:** on any fatal branch-level failure after image processing begins, call `sys.exit(1)` before asset mutation to prevent out-of-sync state.
 
 ### LocalStorage sandboxing

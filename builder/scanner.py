@@ -2,6 +2,7 @@ import requests
 import re
 import json
 import os
+import sys
 import tempfile
 from requests.exceptions import RequestException
 from PIL import Image
@@ -11,8 +12,10 @@ from io import BytesIO
 USERNAME = "arcanesandip"
 PINNED_REPOS = ["collaboration", "dots", "learning-python"]
 
-# Where to save the processed images (Fixed typo and added '../' to escape builder directory)
-IMG_DIR = "../public/assets/project-thumbs"
+# Base folder paths relative to this script
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+IMG_DIR = os.path.join(BASE_DIR, "..", "public", "assets", "project-thumbs")
+PROFILE_PATH = os.path.join(BASE_DIR, "..", "public", "assets", "profile.webp")
 os.makedirs(IMG_DIR, exist_ok=True)
 
 def get_image_from_readme(repo_name):
@@ -104,8 +107,7 @@ def process_profile_pic():
         # Resize to a standard 400x400 square
         img = img.resize((400, 400), Image.Resampling.LANCZOS)
         
-        # Corrected destination path to escape builder/ and go to public/assets/
-        save_path = "../public/assets/profile.webp"
+        save_path = PROFILE_PATH
         img.save(save_path, "WEBP", quality=90)
         
         return "./public/assets/profile.webp"
@@ -124,18 +126,18 @@ def main():
         response = requests.get(api_url, timeout=10)
         if response.status_code == 403:
             print("GitHub API error: rate limit or access denied (403).")
-            return
+            sys.exit(1)
         if not response.ok:
             print(f"GitHub API error: HTTP {response.status_code}.")
-            return
+            sys.exit(1)
 
         repos = response.json()
         if not isinstance(repos, list):
             print("Error: Could not fetch repos.")
-            return
+            sys.exit(1)
     except RequestException as e:
         print(f"Connection Error: {e}")
-        return
+        sys.exit(1)
     
     portfolio_data = []
 

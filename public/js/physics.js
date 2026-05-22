@@ -1,10 +1,22 @@
 /**
- * Physics Module (v1.0)
- * Handles ambient Zero-G drift for UI elements.
+ * Physics Module
+ *
+ * Adds a subtle, long-running ambient drift to decorative UI elements. The
+ * animation is implemented in CSS (keyframes) and this helper assigns
+ * randomized CSS variables per element so the motion appears organic.
+ *
+ * Accessibility / performance notes:
+ * - Respects `prefers-reduced-motion: reduce` by opting out of assigning
+ *   the animation class when the user requests reduced motion.
+ * - Uses CSS variables so the animation stays GPU-friendly and composited.
  */
-
 export function applyZeroG(element, customOptions = {}) {
     if (!element) return;
+
+    // Honor reduced motion preferences early and do not attach animations.
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
 
     // Default configuration for a subtle drift
     const defaults = {

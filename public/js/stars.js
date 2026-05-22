@@ -1,6 +1,14 @@
 /**
- * Stars Module (v2.0)
- * Features: Ambient starfield + Rare shooting star easter egg.
+ * Stars Module
+ *
+ * Purpose:
+ * - Provide a lightweight ambient starfield for visual depth. Stars are
+ *   DOM nodes with small animations; the module keeps node count low and
+ *   removes transient elements after animation to avoid memory growth.
+ *
+ * Tradeoffs:
+ * - Decorative only; respects browser performance and will not run when
+ *   `prefers-reduced-motion` is set (handled in CSS/animation rules).
  */
 
 function spawnShootingStar() {

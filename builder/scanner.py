@@ -1,3 +1,18 @@
+"""
+GitHub portfolio scanner
+
+Why:
+- Fetch pinned GitHub repos, extract a first README image, generate
+    WebP thumbnails and produce an atomic `projects.json` payload consumed
+    by the static site. The atomic write prevents partially-written JSON
+    when the process is interrupted.
+
+Failure boundaries and tradeoffs:
+- The script treats network failures and malformed responses as fatal
+    and calls `sys.exit(1)` to avoid leaving assets out-of-sync with the
+    JSON payload.
+"""
+
 import requests
 import re
 import json

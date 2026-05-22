@@ -3,62 +3,88 @@ export function initContactModal() {
     const modal = document.getElementById('contact-modal');
     const contactForm = document.getElementById('contact-form');
     const modalContent = document.querySelector('.modal-content');
-    let scrollPosition = 0;  /* Global scroll capture for iOS smooth scroll lock/restore */
+    let scrollPosition = 0;  /* Capture scroll position for restore */
 
     if (!contactBtn || !modal || !contactForm || !modalContent) return;
 
-    // Cache the original pristine HTML structure so we can restore the form layout later
+    // Preserve the original markup so the form can be restored after a submit
     if (!window.originalModalHTML) {
         window.originalModalHTML = modalContent.innerHTML;
     }
 
+    // Keyboard handler scoped for this modal instance. Handles Escape + Tab focus trap.
+    function handleKeydown(e) {
+        if (e.key === 'Escape' && !modal.hasAttribute('inert')) {
+            e.preventDefault();
+            closeModal();
+            return;
+        }
+
+        if (e.key === 'Tab' && !modal.hasAttribute('inert')) {
+            const focusable = modal.querySelectorAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])');
+            const nodes = Array.prototype.slice.call(focusable).filter(n => n.offsetParent !== null);
+            if (nodes.length === 0) return;
+            const first = nodes[0];
+            const last = nodes[nodes.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
+    }
+
     // 1. OPEN MODAL INTERACTION
-    contactBtn.onclick = (e) => {
+    contactBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        scrollPosition = window.scrollY;  /* Capture scroll position before lock */
+        scrollPosition = window.scrollY;
         requestAnimationFrame(() => {
-            modal.classList.add('is-active');  /* Defer class toggle for CSS stability */
-            document.body.classList.add('no-scroll');  /* Applies overflow:hidden without DOM shifting */
-            modal.removeAttribute('inert');  /* Allow modal interaction */
+            modal.classList.add('is-active');
+            document.body.classList.add('no-scroll');
+            modal.removeAttribute('inert');
+            // Move focus into the dialog for accessibility
+            modalContent.setAttribute('tabindex', '-1');
+            modalContent.focus();
         });
-        document.getElementById('contact-name')?.focus();
-    };
+        document.addEventListener('keydown', handleKeydown);
+    });
 
     // 2. CLOSE MODAL & RESTORE FORM LAYOUT
     const closeModal = () => {
         modal.classList.remove('is-active');
         modal.setAttribute('inert', '');
-        document.body.classList.remove('no-scroll');  /* Re-enable scrolling */
-        window.scrollTo(0, scrollPosition);  /* Restore scroll position without jump */
-        
+        document.body.classList.remove('no-scroll');
+        window.scrollTo(0, scrollPosition);
+
+        // Remove keyboard handler immediately to avoid races with DOM replacement
+        document.removeEventListener('keydown', handleKeydown);
+
         // Wait for the CSS fade-out transition to complete before flipping the DOM nodes
         setTimeout(() => {
             modalContent.innerHTML = window.originalModalHTML;
-            initContactModal(); // Re-bind event handlers to the brand new form elements
+            initContactModal(); // Re-bind event handlers to the new form elements
         }, 250);
-        
+
         contactBtn.focus();
     };
 
-    // Handle close button and background clicks
-    modalContent.onclick = (e) => {
+    // Handle close button and background clicks via event delegation
+    modalContent.addEventListener('click', (e) => {
         if (e.target.id === 'close-modal-btn') closeModal();
-    };
+    });
 
-    modal.onclick = (e) => {
+    modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
-    };
-
-    document.onkeydown = (e) => {
-        if (e.key === 'Escape' && !modal.hasAttribute('inert')) closeModal();
-    };
+    });
 
     // 3. INTERCEPT AND SEND SILENTLY IN BACKGROUND
-    contactForm.onsubmit = async (e) => {
-        e.preventDefault(); // This is the magic line that stops Formspree's page from opening!
-        
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
         const submitBtn = contactForm.querySelector('.form-submit-btn');
-        const inputName = document.getElementById('contact-name').value;
+        const inputName = document.getElementById('contact-name')?.value || '';
 
         if (submitBtn) {
             submitBtn.disabled = true;
@@ -67,16 +93,15 @@ export function initContactModal() {
         }
 
         try {
-            // **CHANGED LINE:** Wrap FormData in URLSearchParams to match headers perfectly over HTTPS
+            // Wrap FormData in URLSearchParams for JSON/WWW form compatibility
             const response = await fetch(contactForm.action, {
                 method: 'POST',
                 body: new URLSearchParams(new FormData(contactForm)),
                 headers: { 'Accept': 'application/json' }
             });
 
-            // Wipe out the inputs to show the custom verification message
+            // Show a small verification message and close the modal shortly after
             modalContent.innerHTML = '';
-
             const closeBtnSec = document.createElement('button');
             closeBtnSec.id = 'close-modal-btn';
             closeBtnSec.className = 'close-btn';
@@ -87,7 +112,7 @@ export function initContactModal() {
 
             const iconNode = document.createElement('div');
             iconNode.style.cssText = 'font-size: 2.5rem; color: var(--color-secondary-text);';
-            
+
             const titleNode = document.createElement('h3');
             titleNode.className = 'modal-title';
             titleNode.style.cssText = 'margin: 0;';
@@ -117,9 +142,9 @@ export function initContactModal() {
             setTimeout(closeModal, 3000);
 
         } catch (error) {
-            // CATCH EXCEPTION: This block will catch the local security drop when running file:///
+            // Local testing or network error; show a helpful message
             console.warn("Local testing exception caught:", error);
-            
+
             modalContent.innerHTML = '';
             const closeBtnSec = document.createElement('button');
             closeBtnSec.id = 'close-modal-btn';
@@ -128,7 +153,7 @@ export function initContactModal() {
 
             const errContainer = document.createElement('div');
             errContainer.style.cssText = 'text-align: center; padding: 2rem 0; display: flex; flex-direction: column; gap: 1rem; align-items: center;';
-            
+
             const errIcon = document.createElement('div');
             errIcon.style.cssText = 'font-size: 2.5rem; color: hsl(350, 70%, 50%);';
             errIcon.textContent = '⚡';
@@ -139,7 +164,7 @@ export function initContactModal() {
 
             const errSubtitle = document.createElement('p');
             errSubtitle.className = 'modal-subtitle';
-            errSubtitle.textContent = 'Browsers block silent background emails when running locally via double-click. Once this goes live on your repository, it will work perfectly without changing a single line!';
+            errSubtitle.textContent = 'Browsers block silent background emails when running locally via double-click. Once this goes live on your repository, it will work without changing a single line.';
 
             errContainer.appendChild(errIcon);
             errContainer.appendChild(errTitle);
@@ -147,5 +172,5 @@ export function initContactModal() {
             modalContent.appendChild(closeBtnSec);
             modalContent.appendChild(errContainer);
         }
-    };
+    });
 }

@@ -36,7 +36,8 @@ body {
 #main-content {
   min-height: 100%;
   width: 100%;
-  margin: 100px auto 40px auto; /* Clean separation below fixed navigation */
+  /* Use tokenized spacing for consistent rhythm across viewports */
+  margin: var(--space-xxl) auto var(--space-md) auto;
   padding: 0 var(--space-sm);
   display: flex;
   flex-direction: column;

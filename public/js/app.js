@@ -1,7 +1,21 @@
 /**
- * Portfolio Loader (v3.3 - High Performance with Zero-G Physics)
- * Features: LocalStorage caching, Background sync, and Ambient Drift Parallax.
- * Change log: Grounded text titles, added drifting CTA button for UX.
+ * Portfolio loader
+ *
+ * Intent:
+ * - Deterministic hydration: render cached payload immediately, then fetch
+ *   a fresh `projects.json` and update only when the serialized payload
+ *   has changed. This avoids unnecessary DOM churn and preserves animation
+ *   stability during refreshes.
+ * - Minimal, dependency-free runtime: small ES modules, no frameworks.
+ * - Defensive boundaries: localStorage is treated as an optimization only
+ *   (it may be unavailable in private modes or hit quota limits). If
+ *   storage calls fail we fall back to an in-memory cache to avoid breaking
+ *   the UI.
+ *
+ * Security notes:
+ * - `escapeHTML()` performs a light sanitization for text fields rendered
+ *   into HTML. Numeric or non-string fields are explicitly coerced before
+ *   interpolation to avoid unexpected objects being injected into templates.
  */
 
 import { initStarfield } from './stars.js';
@@ -14,6 +28,9 @@ initContactModal(); // 2. RUN IT HERE!
 const portfolioContainer = document.getElementById("repo-list");
 const headerImage = document.querySelector(".portfolio-header-image");
 const CACHE_KEY = "arcanesandip_portfolio_cache";
+
+// Fallback in-memory cache used if localStorage is unavailable or throws.
+let memoryCache = null;
 
 function escapeHTML(value) {
     return String(value)
@@ -38,12 +55,14 @@ function renderProjects(projects) {
         // ACTIVATE PHYSICS: Each card gets its own independent random drift
         applyZeroG(projectCard);
 
-        const safeName = escapeHTML(project.name.replace(/-/g, ' '));
-        const safeDescription = escapeHTML(project.description || "No description provided.");
-        const safeUrl = escapeHTML(project.url);
-        const safeLanguage = escapeHTML(project.language || 'Code');
+        const safeName = escapeHTML(String(project.name || '').replace(/-/g, ' '));
+        const safeDescription = escapeHTML(String(project.description || "No description provided."));
+        const safeUrl = escapeHTML(String(project.url || '#'));
+        const safeLanguage = escapeHTML(String(project.language || 'Code'));
         const safeMobileImage = project.images && project.images.mobile ? escapeHTML(project.images.mobile) : '';
         const safeDesktopImage = project.images && project.images.desktop ? escapeHTML(project.images.desktop) : '';
+        // Coerce numeric fields to primitives to avoid accidental object interpolation
+        const safeStars = Number(project.stars) || 0;
 
         const imageHtml = safeMobileImage && safeDesktopImage
             ? `<picture>
@@ -63,11 +82,11 @@ function renderProjects(projects) {
                     <div class="card-header">
                         <h3>${safeName}</h3>
                         <div class="stats">
-                            <span>⭐ ${project.stars}</span>     
+                            <span>⭐ ${safeStars}</span>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a class="button no-underline" id="my-work-link" href="${safeUrl}" target="_blank">
+                        <a class="button no-underline my-work-link" href="${safeUrl}" target="_blank" rel="noopener noreferrer">
                             <span class="button-text">View my Github</span>
                             <img src="public/assets/icons/arrow-right.svg" alt="arrow" class="right-arrow-icon" loading="eager" />
                         </a>
@@ -100,7 +119,16 @@ async function loadPortfolio() {
     // 2. DATA SYNCHRONIZATION LOGIC (The Brain - Unchanged from v3.2)
     
     // CHECK CACHE (Instant Load for better UX)
-    const cachedData = localStorage.getItem(CACHE_KEY);
+    // localStorage may throw in privacy modes or when quota is exceeded.
+    // Use a try/catch and fall back to an in-memory cache when necessary.
+    let cachedData = null;
+    try {
+        cachedData = localStorage.getItem(CACHE_KEY);
+    } catch (err) {
+        // localStorage unavailable; use in-memory cache
+        cachedData = memoryCache;
+    }
+
     if (cachedData) {
         try {
             const data = JSON.parse(cachedData);
@@ -125,16 +153,21 @@ async function loadPortfolio() {
 
         // Only re-render if the GitHub data has actually changed
         if (freshDataString !== cachedData) {
-            localStorage.setItem(CACHE_KEY, freshDataString);
-            
+            try {
+                localStorage.setItem(CACHE_KEY, freshDataString);
+            } catch (err) {
+                // If localStorage is not writable, keep a memory fallback
+                memoryCache = freshDataString;
+            }
+
             if (headerImage && freshData.profile_img) {
                 headerImage.src = freshData.profile_img;
             }
-            
+
             if (freshData.projects) {
                 renderProjects(freshData.projects);
             }
-            
+
             console.log("Portfolio updated from server.");
         }
     } catch (error) {

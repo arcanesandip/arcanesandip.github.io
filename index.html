@@ -66,12 +66,12 @@
     </main>
 
     <!-- Contact Form Popup Modal Container -->
-    <div id="contact-modal" class="modal-overlay" inert>
-      <div class="modal-content">
+    <div id="contact-modal" class="modal-overlay" inert role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+      <div class="modal-content" tabindex="-1">
         <!-- Close Button -->
         <button id="close-modal-btn" class="close-btn" aria-label="Close modal">&times;</button>
         
-        <h3 class="modal-title">Send a Message</h3>
+        <h3 id="contact-modal-title" class="modal-title">Send a Message</h3>
         <p class="modal-subtitle">Got a question or want to collaborate? Drop it below.</p>
         
         <!-- Contact Form -->

@@ -120,3 +120,19 @@
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
                 border-color 0.3s ease;
 }
+
+/* Respect reduced motion preferences: disable ambient and decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  .floating-element,
+  .star,
+  .shooting-star,
+  .spinner {
+    animation: none !important;
+  }
+}
+
+/* Improve keyboard focus visibility for interactive controls */
+:focus-visible {
+  outline: 3px solid var(--color-secondary-text);
+  outline-offset: 2px;
+}

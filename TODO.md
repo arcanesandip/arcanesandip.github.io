@@ -8,3 +8,5 @@ This repository is now released as `v2.0.0` and the core pipeline is frozen for 
 - `public/js/app.js`: `localStorage` caching is defensive, but the system still assumes a valid `projects.json` shape. An explicit front-end validation step would harden this further.
 - `index.html`: CSP contains `'unsafe-inline'`. Tightening the inline script/content policy is important for future security-hardening releases.
 - `README.md` / `ARCHITECTURE.md`: operational claims should be revisited if the automation pipeline changes or if new GitHub API rate-limit behavior emerges.
+
+- **Browser Compatibility (Firefox/Gecko)**: Contact popup animation jitter. Acknowledged as a potential GPU-layer or dynamic viewport (dvh) reflow issue. Future polish candidate: investigate 'will-change' stabilization or static fallback for non-WebKit engines.

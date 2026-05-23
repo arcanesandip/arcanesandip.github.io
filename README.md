@@ -48,3 +48,6 @@ python3 builder/scanner.py
 # Launch the native python local server hook
 python3 -m http.server 8080
 ```
+
+### Development Credits
+This project was developed through an AI-augmented workflow. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for details on the collaborative process.

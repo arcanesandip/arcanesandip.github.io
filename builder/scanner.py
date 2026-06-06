@@ -25,7 +25,7 @@ from io import BytesIO
 
 # 1. SETTINGS
 USERNAME = "arcanesandip"
-PINNED_REPOS = ["collaboration", "dots", "learning-python"]
+PINNED_REPOS = ["collaboration", "dots", "foundations"]
 
 # Base folder paths relative to this script
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))

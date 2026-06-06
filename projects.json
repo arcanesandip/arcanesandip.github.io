@@ -32,6 +32,22 @@
                 "desktop": "./public/assets/project-thumbs/dots_desktop.webp",
                 "mobile": "./public/assets/project-thumbs/dots_mobile.webp"
             }
+        },
+        {
+            "name": "foundations",
+            "description": "A structured self-study curriculum covering core programming and computer science concepts \u2014 built from the ground up.",
+            "url": "https://github.com/arcanesandip/foundations",
+            "stars": 1,
+            "language": "Python",
+            "tags": [
+                "algorithms",
+                "foundation",
+                "learning-in-public"
+            ],
+            "images": {
+                "desktop": "./public/assets/project-thumbs/foundations_desktop.webp",
+                "mobile": "./public/assets/project-thumbs/foundations_mobile.webp"
+            }
         }
     ]
 }

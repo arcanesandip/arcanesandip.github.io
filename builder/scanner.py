@@ -33,12 +33,24 @@ IMG_DIR = os.path.join(BASE_DIR, "..", "public", "assets", "project-thumbs")
 PROFILE_PATH = os.path.join(BASE_DIR, "..", "public", "assets", "profile.webp")
 os.makedirs(IMG_DIR, exist_ok=True)
 
+# Fetch Token from GitHub Actions Environment securely
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+
+def get_auth_headers():
+    """Generates proper headers for GitHub API authentication."""
+    headers = {"Accept": "application/vnd.github+json"}
+    if GITHUB_TOKEN:
+        headers["Authorization"] = f"Bearer {GITHUB_TOKEN}"
+    return headers
+
 def get_image_from_readme(repo_name):
     """Checks main and master branches for the first image in README."""
+    headers = get_auth_headers()
     for branch in ['main', 'master']:
         url = f"https://raw.githubusercontent.com/{USERNAME}/{repo_name}/{branch}/README.md"
         try:
-            res = requests.get(url, timeout=10)
+            # Added authentication headers to raw file reads as well
+            res = requests.get(url, timeout=10, headers=headers)
             if res.status_code == 200:
                 md_images = re.findall(r'!\[.*?\]\((.*?)\)', res.text)
                 html_images = re.findall(r'<img [^>]*src="([^"]+)"', res.text)
@@ -56,20 +68,26 @@ def get_image_from_readme(repo_name):
                             img_url = img_url + "?raw=true"
                     return img_url
         except Exception as e:
-            print(f"   ! Error fetching README for {repo_name} on {branch}: {e}")
+            print(f"    ! Error fetching README for {repo_name} on {branch}: {e}")
             continue
     return None
 
 def process_and_save_image(url, repo_name):
     """Downloads, resizes to 16:9, and converts image to WebP (Desktop & Mobile)."""
     try:
-        print(f"   -> Downloading image for {repo_name}...")
-        print(f"      URL: {url}")
-        response = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'})
+        print(f"    -> Downloading image for {repo_name}...")
+        print(f"       URL: {url}")
+        
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        # If accessing raw assets belonging to the user repo, pass auth token
+        if GITHUB_TOKEN and "github" in url:
+            headers["Authorization"] = f"Bearer {GITHUB_TOKEN}"
+
+        response = requests.get(url, timeout=15, headers=headers)
         response.raise_for_status()
         img = Image.open(BytesIO(response.content))
         img = img.convert("RGB")
-        print(f"      Downloaded: {img.format} {img.size}")
+        print(f"       Downloaded: {img.format} {img.size}")
 
         # Define sizes: (suffix, width, height)
         sizes = [("_desktop", 800, 450), ("_mobile", 400, 225)]
@@ -77,7 +95,7 @@ def process_and_save_image(url, repo_name):
 
         for suffix, target_w, target_h in sizes:
             try:
-                print(f"      Processing {suffix.replace('_', '')}...")
+                print(f"       Processing {suffix.replace('_', '')}...")
                 img_w, img_h = img.size
                 img_aspect = img_w / img_h
                 target_aspect = target_w / target_h
@@ -100,14 +118,14 @@ def process_and_save_image(url, repo_name):
                 save_path = os.path.join(IMG_DIR, filename)
                 thumb.save(save_path, "WEBP", quality=80)
                 paths[suffix.replace("_", "")] = f"./public/assets/project-thumbs/{filename}"
-                print(f"      ✓ Saved: {filename}")
+                print(f"       ✓ Saved: {filename}")
             except Exception as e:
-                print(f"      ! Error processing {suffix}: {e}")
+                print(f"       ! Error processing {suffix}: {e}")
                 continue
         
         return paths if paths else None
     except Exception as e:
-        print(f"   X Error downloading image: {e}")
+        print(f"    X Error downloading image: {e}")
         return None
 
 def process_profile_pic():
@@ -115,7 +133,11 @@ def process_profile_pic():
     url = f"https://github.com/{USERNAME}.png"
     try:
         print(f"Updating profile picture for {USERNAME}...")
-        response = requests.get(url, timeout=15)
+        headers = {}
+        if GITHUB_TOKEN:
+            headers["Authorization"] = f"Bearer {GITHUB_TOKEN}"
+            
+        response = requests.get(url, timeout=15, headers=headers)
         img = Image.open(BytesIO(response.content))
         img = img.convert("RGB")
         
@@ -127,18 +149,23 @@ def process_profile_pic():
         
         return "./public/assets/profile.webp"
     except Exception as e:
-        print(f"   X Error updating profile pic: {e}")
+        print(f"    X Error updating profile pic: {e}")
         return f"https://github.com/{USERNAME}.png"
 
 def main():
     print(f"Scanning GitHub for: {PINNED_REPOS}...")
+    if GITHUB_TOKEN:
+        print("Secure identity token loaded.")
+    else:
+        print("Warning: Running without an identity token (susceptible to rate limits).")
     
     # 1. PROCESS PROFILE PIC FIRST
     pfp_path = process_profile_pic()
     
     api_url = f"https://api.github.com/users/{USERNAME}/repos"
+    headers = get_auth_headers()
     try:
-        response = requests.get(api_url, timeout=10)
+        response = requests.get(api_url, timeout=10, headers=headers)
         if response.status_code == 403:
             print("GitHub API error: rate limit or access denied (403).")
             sys.exit(1)

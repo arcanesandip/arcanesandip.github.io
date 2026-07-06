@@ -179,4 +179,4 @@ async function loadPortfolio() {
 }
 
 // Kick off the load process
-loadPortfolio();// terminal test
+loadPortfolio();

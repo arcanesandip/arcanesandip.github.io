@@ -25,7 +25,7 @@ from io import BytesIO
 
 # 1. SETTINGS
 USERNAME = "arcanesandip"
-PINNED_REPOS = ["collaboration", "dots", "foundations"]
+PINNED_REPOS = ["collaboration", "dots", "foundations", "react-starter", "imgkit"]
 
 # Base folder paths relative to this script
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))

@@ -37,7 +37,7 @@
             "name": "foundations",
             "description": "A structured self-study curriculum covering core programming and computer science concepts \u2014 built from the ground up.",
             "url": "https://github.com/arcanesandip/foundations",
-            "stars": 1,
+            "stars": 2,
             "language": "Python",
             "tags": [
                 "algorithms",
@@ -48,6 +48,34 @@
                 "desktop": "./public/assets/project-thumbs/foundations_desktop.webp",
                 "mobile": "./public/assets/project-thumbs/foundations_mobile.webp"
             }
+        },
+        {
+            "name": "imgkit",
+            "description": "Bulk image processing for the web. Drop a folder, get mobile, tablet and desktop sizes in WebP. No bloat.",
+            "url": "https://github.com/arcanesandip/imgkit",
+            "stars": 3,
+            "language": "Python",
+            "tags": [
+                "image-processing",
+                "python",
+                "responsive-images",
+                "webp"
+            ],
+            "images": null
+        },
+        {
+            "name": "react-starter",
+            "description": "Personal React + Tailwind starter. Clone and build.",
+            "url": "https://github.com/arcanesandip/react-starter",
+            "stars": 3,
+            "language": "JavaScript",
+            "tags": [
+                "react",
+                "starter-template",
+                "tailwindcss",
+                "vite"
+            ],
+            "images": null
         }
     ]
 }

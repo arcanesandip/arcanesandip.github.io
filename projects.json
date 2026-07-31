@@ -25,8 +25,8 @@
             "stars": 2,
             "language": "Shell",
             "tags": [
-                "arch-linux",
-                "dotfiles"
+                "dotfiles",
+                "linux"
             ],
             "images": {
                 "desktop": "./public/assets/project-thumbs/dots_desktop.webp",

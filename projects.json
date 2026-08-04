@@ -20,7 +20,7 @@
         },
         {
             "name": "dots",
-            "description": "my personal dotfiles for arch linux, featuring helix and zsh.",
+            "description": "my personal dotfiles for arch linux",
             "url": "https://github.com/arcanesandip/dots",
             "stars": 2,
             "language": "Shell",

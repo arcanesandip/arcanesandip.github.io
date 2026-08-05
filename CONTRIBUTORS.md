@@ -3,6 +3,8 @@
     - Provided project vision, system architecture, and technical direction.
     - Orchestrated prompt engineering workflows.
     - Final oversight, validation, and system integration.
+- **[matrixxxs](https://github.com/matrixxxs):**
+    - Tested and diagnosed local setup friction, helping identify environment-specific packaging gaps.
 - **AI Collaborator (Gemini):**
     - Executed core technical implementation of Python automation and JavaScript logic.
     - Performed diagnostic testing and cross-browser troubleshooting.

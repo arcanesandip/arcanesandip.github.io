@@ -66,7 +66,10 @@ TODO.md                       Known limitations, acknowledged as of v2.0.0
 git clone https://github.com/arcanesandip/arcanesandip.github.io.git
 cd arcanesandip.github.io
 
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r builder/requirements.txt
+
 python3 builder/scanner.py       # regenerates projects.json + thumbnails
 
 python3 -m http.server 8080      # serve from the repo root

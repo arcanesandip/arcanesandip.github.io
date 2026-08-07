@@ -23,7 +23,7 @@
             "description": "my personal dotfiles for arch linux",
             "url": "https://github.com/arcanesandip/dots",
             "stars": 2,
-            "language": "Shell",
+            "language": "Lua",
             "tags": [
                 "dotfiles",
                 "linux"

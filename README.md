@@ -8,10 +8,16 @@ Live at: https://arcanesandip.github.io
 
 ## How it works
 
-```
-builder/scanner.py  ─┐
-                      ├─> projects.json  ─>  public/js/app.js  ─>  #repo-list
-GitHub API + READMEs ─┘        (fetched at page load, cached in localStorage)
+```mermaid
+graph TD
+    A["builder/scanner.py"] --> C["projects.json"]
+    B["GitHub API + READMEs"] --> C
+    C --> D["public/js/app.js"]
+    D --> E["#repo-list"]
+    
+    subgraph Client Cache
+        D -.->|cached in localStorage| D
+    end
 ```
 
 1. **`builder/scanner.py`** calls the GitHub API for the repos listed in

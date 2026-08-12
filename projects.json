@@ -19,21 +19,6 @@
             }
         },
         {
-            "name": "dots",
-            "description": "my personal dotfiles for arch linux",
-            "url": "https://github.com/arcanesandip/dots",
-            "stars": 2,
-            "language": "Lua",
-            "tags": [
-                "dotfiles",
-                "linux"
-            ],
-            "images": {
-                "desktop": "./public/assets/project-thumbs/dots_desktop.webp",
-                "mobile": "./public/assets/project-thumbs/dots_mobile.webp"
-            }
-        },
-        {
             "name": "foundations",
             "description": "A structured self-study curriculum covering core programming and computer science concepts \u2014 built from the ground up.",
             "url": "https://github.com/arcanesandip/foundations",

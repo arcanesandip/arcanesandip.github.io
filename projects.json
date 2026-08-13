@@ -19,20 +19,16 @@
             }
         },
         {
-            "name": "foundations",
-            "description": "A structured self-study curriculum covering core programming and computer science concepts \u2014 built from the ground up.",
-            "url": "https://github.com/arcanesandip/foundations",
+            "name": "dotfiles",
+            "description": "my personal dotfiles for arch linux",
+            "url": "https://github.com/arcanesandip/dotfiles",
             "stars": 2,
-            "language": "Python",
+            "language": "Lua",
             "tags": [
-                "algorithms",
-                "foundation",
-                "learning-in-public"
+                "dotfiles",
+                "linux"
             ],
-            "images": {
-                "desktop": "./public/assets/project-thumbs/foundations_desktop.webp",
-                "mobile": "./public/assets/project-thumbs/foundations_mobile.webp"
-            }
+            "images": null
         },
         {
             "name": "imgkit",
@@ -45,6 +41,19 @@
                 "python",
                 "responsive-images",
                 "webp"
+            ],
+            "images": null
+        },
+        {
+            "name": "python-foundations",
+            "description": "Learning Python fundamentals.",
+            "url": "https://github.com/arcanesandip/python-foundations",
+            "stars": 2,
+            "language": "Python",
+            "tags": [
+                "fundamentals",
+                "learning-in-public",
+                "python"
             ],
             "images": null
         },

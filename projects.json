@@ -45,19 +45,6 @@
             "images": null
         },
         {
-            "name": "python-foundations",
-            "description": "Learning Python fundamentals.",
-            "url": "https://github.com/arcanesandip/python-foundations",
-            "stars": 2,
-            "language": "Python",
-            "tags": [
-                "fundamentals",
-                "learning-in-public",
-                "python"
-            ],
-            "images": null
-        },
-        {
             "name": "react-starter",
             "description": "Personal React + Tailwind starter. Clone and build.",
             "url": "https://github.com/arcanesandip/react-starter",

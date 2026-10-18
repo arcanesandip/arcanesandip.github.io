@@ -5,7 +5,7 @@
             "name": "collaboration",
             "description": "A simple collaborative website where anyone can add their name to learn how to use git and github.",
             "url": "https://github.com/arcanesandip/collaboration",
-            "stars": 3,
+            "stars": 2,
             "language": "HTML",
             "tags": [
                 "beginner-project",
@@ -48,7 +48,7 @@
             "name": "react-starter",
             "description": "Personal React + Tailwind starter. Clone and build.",
             "url": "https://github.com/arcanesandip/react-starter",
-            "stars": 3,
+            "stars": 2,
             "language": "JavaScript",
             "tags": [
                 "react",
